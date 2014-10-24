@@ -2,15 +2,13 @@
 namespace Slince\Upload\Rule;
 
 use Slince\Upload\RuleInterface;
+use Slince\Upload\ErrorStore;
 
 class AbstractRule implements RuleInterface
 {
     protected $_errorMsg = 'No error';
     
-    protected $_errorCode = 0;
-    
-    protected $_defaultErrorMsg = 'No error';
-    
+    protected $_errorCode = ErrorStore::ERROR_OK;
     
     function getErrorMsg()
     {
@@ -20,10 +18,5 @@ class AbstractRule implements RuleInterface
     function getErrorCode()
     {
         return $this->_errorCode;
-    }
-    
-    function setDefaultErrorMsg($msg)
-    {
-        $this->_defaultErrorMsg = $msg;
     }
 }

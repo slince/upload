@@ -2,17 +2,16 @@
 namespace Slince\Upload\Rule;
 
 use Slince\Upload\FileInfo;
+use Slince\Applicaion\EventStore;
+use Slince\Upload\ErrorStore;
 
 class SizeRule extends AbstractRule
 {
-    protected $_errorCode = 100;
-    
-    protected $_defaultErrorMsg = 'File size is not valid';
-    
+
     private $_maxSize;
-    
+
     private $_minSize;
-    
+
     function __construct($start, $end = null)
     {
         if (is_null($end)) {
@@ -22,7 +21,7 @@ class SizeRule extends AbstractRule
             $this->_maxSize = $end;
         }
     }
-    
+
     function validate(FileInfo $file)
     {
         $size = $file->getSize();
@@ -31,7 +30,8 @@ class SizeRule extends AbstractRule
             $res = $size >= $this->_minSize;
         }
         if (! $res) {
-            $this->_errorMsg = $this->_defaultErrorMsg;
+            $this->_errorCode = ErrorStore::ERROR_CUSTOM_SIZE;
+            $this->_errorMsg = 'File size is not valid';
         }
         return $res;
     }

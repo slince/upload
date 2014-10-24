@@ -15,7 +15,7 @@ class RuleFactory
      * @throws UploadException
      * @return object
      */
-    static function create($type, $args, $msg)
+    static function create($type, $args = null)
     {
         $ruleCalss = '';
         switch ($type) {
@@ -37,9 +37,6 @@ class RuleFactory
                 $instance = $ruleReflection->newInstanceArgs($args); 
             } else {
                 $instance = $ruleReflection->newInstanceWithoutConstructor();
-            }
-            if (! is_null($msg)) {
-                $instance->setCustomErrorMsg($msg);
             }
             return $instance;
         } catch (\ReflectionException $e) {

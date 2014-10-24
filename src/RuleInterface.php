@@ -19,5 +19,4 @@ interface RuleInterface
     
     function getErrorCode();
     
-    function setDefaultErrorMsg($msg);
 }

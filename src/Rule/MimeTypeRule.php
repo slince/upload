@@ -2,13 +2,12 @@
 namespace Slince\Upload\Rule;
 
 use Slince\Upload\FileInfo;
+use Slince\Upload\ErrorStore;
+use Slince\Applicaion\EventStore;
 
 class MimeTypeRule extends AbstractRule
 {
-    protected $_errorCode = 101;
-    
-    protected $_defaultErrorMsg= 'File type is not valid';
-    
+
     private $_allowTypes = [];
 
     static $universalImages = [
@@ -46,7 +45,8 @@ class MimeTypeRule extends AbstractRule
     function validate(FileInfo $file)
     {
         if (in_array($file->getMimeType(), $this->_allowTypes)) {
-            $this->_errorMsg = $this->_defaultErrorMsg;
+            $this->_errorCode = ErrorStore::ERROR_CUSTOM_MIME_TYPE;
+            $this->_errorMsg = 'File type is not valid';
             return false;
         }
         return true;
