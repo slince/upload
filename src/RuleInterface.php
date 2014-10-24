@@ -9,4 +9,15 @@ interface RuleInterface
      * @return boolean
      */
     function validate(FileInfo $file);
+    
+    /**
+     * 获取错误信息
+     * 
+     * @return string
+     */
+    function getErrorMsg();
+    
+    function getErrorCode();
+    
+    function setDefaultErrorMsg($msg);
 }

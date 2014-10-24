@@ -1,11 +1,14 @@
 <?php
 namespace Slince\Upload\Rule;
 
-use Slince\Upload\RuleInterface;
 use Slince\Upload\FileInfo;
 
-class SizeRule implements RuleInterface 
+class SizeRule extends AbstractRule
 {
+    protected $_errorCode = 100;
+    
+    protected $_defaultErrorMsg = 'File size is not valid';
+    
     private $_maxSize;
     
     private $_minSize;
@@ -26,6 +29,9 @@ class SizeRule implements RuleInterface
         $res = $size <= $this->_maxSize;
         if (! is_null($this->_minSize)) {
             $res = $size >= $this->_minSize;
+        }
+        if (! $res) {
+            $this->_errorMsg = $this->_defaultErrorMsg;
         }
         return $res;
     }
