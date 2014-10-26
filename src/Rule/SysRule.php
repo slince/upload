@@ -5,7 +5,7 @@
  */
 namespace Slince\Upload\Rule;
 
-use Slince\Upload\RuleInterface;
+use Slince\Upload\FileInfo;
 use Slince\Upload\ErrorStore;
 
 class SysRule extends AbstractRule

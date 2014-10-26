@@ -8,7 +8,7 @@ namespace Slince\Upload;
 class FileInfo
 {
 
-    public $hasError = false;
+    public $hasError = true;
 
     private $_tmpName = '';
 
@@ -52,6 +52,16 @@ class FileInfo
         return $mime;
     }
 
+    function getExtension()
+    {
+        return pathinfo($this->_originName, PATHINFO_EXTENSION);
+    }
+    
+    function getTmpName()
+    {
+        return $this->_tmpName;
+    }
+    
     function getOriginName()
     {
         return $this->_originName;
@@ -85,5 +95,9 @@ class FileInfo
     function setPath($path)
     {
         $this->_path = $path;
+    }
+    function getPath()
+    {
+        return $this->_path;
     }
 }

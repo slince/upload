@@ -7,7 +7,6 @@ namespace Slince\Upload\Rule;
 
 use Slince\Upload\FileInfo;
 use Slince\Upload\ErrorStore;
-use Slince\Applicaion\EventStore;
 
 class ExtRule extends AbstractRule
 {
@@ -54,7 +53,7 @@ class ExtRule extends AbstractRule
 
     function validate(FileInfo $file)
     {
-        if (in_array($file->getExtension(), $this->_allowExts)) {
+        if (! in_array($file->getExtension(), $this->_allowExts)) {
             $this->_errorCode = ErrorStore::ERROR_CUSTOM_EXT;
             $this->_errorMsg = 'File extension is not valid';
             return false;

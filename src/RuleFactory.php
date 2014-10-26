@@ -21,29 +21,32 @@ class RuleFactory
      */
     static function create($type, $args = null)
     {
-        $ruleCalss = '';
+        $ruleClass = '';
         switch ($type) {
             case Registry::RULE_SIZE :
-                $ruleCalss = 'SizeRule';
+                $ruleClass = 'SizeRule';
                 break;
             case Registry::RULE_MIME:
-                $ruleCalss = 'MimeTypeRule';
+                $ruleClass = 'MimeTypeRule';
                 break;
             case Registry::RULE_EXT:
-                $ruleCalss = 'ExtensionRule';
+                $ruleClass = 'ExtRule';
+                break;
+            case Registry::RULE_SYS:
+                $ruleClass = 'SysRule';
                 break;
         }
-        $ruleCalss = "Rule\\{$ruleCalss}";
-        $rule = new $ruleClass();
+        $ruleClass = "Slince\\Upload\\Rule\\{$ruleClass}";
         try {
-            $ruleReflection = new \ReflectionClass($ruleCalss);
-            if ($rule->getConstructor() != null) {
+            $ruleReflection = new \ReflectionClass($ruleClass);
+            if ($ruleReflection->getConstructor() != null) {
                 $instance = $ruleReflection->newInstanceArgs($args); 
             } else {
                 $instance = $ruleReflection->newInstanceWithoutConstructor();
             }
             return $instance;
         } catch (\ReflectionException $e) {
+            echo $e->getMessage();exit;
             throw new UploadException(sprintf('Rule "%s" does not support', $type));
         }
     }

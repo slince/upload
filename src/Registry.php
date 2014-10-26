@@ -13,23 +13,61 @@ use Slince\Upload\Exception\UploadException;
 class Registry
 {
 
+    /**
+     * 是否覆盖
+     * 
+     * @var boolean
+     */
     private $_override = false;
 
+    /**
+     * 保存位置
+     * 
+     * @var string
+     */
     private $_savePath = './';
 
+    /**
+     * 是否覆盖指示
+     * 
+     * @var boolean
+     */
     private $_randName = false;
 
+    /**
+     * 系统验证规则
+     * 
+     * @var string
+     */
     const RULE_SYS = 'sys';
 
+    /**
+     * 文件大小限制验证
+     * 
+     * @var string
+     */
     const RULE_SIZE = 'size';
 
+    /**
+     * 文件类型验证
+     * 
+     * @var string
+     */
     const RULE_MIME = 'mime';
 
+    /**
+     * 扩展名验证
+     * 
+     * @var string
+     */
     const RULE_EXT = 'ext';
 
+    /**
+     * 验证规则数组
+     * 
+     * @var array
+     */
     private $_rules = [];
-
-    private $_errorMsg = '';
 
     function __construct($path = './')
     {
@@ -37,16 +75,31 @@ class Registry
         $this->addRule(RuleFactory::create(self::RULE_SYS));
     }
 
+    /**
+     * 设置是否覆盖指示
+     * @param unknown $val
+     */
     function setOverride($val)
     {
         $this->_override = $val;
     }
 
+    /**
+     * 是否覆盖
+     * 
+     * @return boolean
+     */
     function getOverride()
     {
         return $this->_override;
     }
 
+    /**
+     * 设置保存位置
+     * 
+     * @param string $path
+     * @throws UploadException
+     */
     function setSavePath($path)
     {
         if (! file_exists($path)) {
@@ -58,30 +111,67 @@ class Registry
         $this->_savePath = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
     }
 
+    /**
+     * 设置保存位置
+     * 
+     * @return string
+     */
     function getSavePath()
     {
         return $this->_savePath;
     }
 
+    /**
+     * 设置是否启用随机名
+     * 
+     * @param boolean $val
+     */
     function setRandName($val)
     {
         $this->_randName = $val;
     }
 
+    /**
+     * 获取是否采用随机名
+     * 
+     * @return boolean
+     */
     function getRandName()
     {
         return $this->_randName;
     }
 
+    /**
+     * 添加一个验证规则
+     * 
+     * @param RuleInterface $rule
+     */
     function addRule(RuleInterface $rule)
     {
         $this->_rules[] = $rule;
     }
+    
+    /**
+     * 获取所有的验证规则
+     * 
+     * @return array
+     */
+    function getRules()
+    {
+        return $this->_rules;
+    }
 
+    /**
+     * 处理上传
+     * 
+     * @param array $files
+     * @throws UploadException
+     * @return \Slince\Upload\FileInfo|array;
+     */
     function process($files)
     {
-        if (empty($file)) {
-            throw new UploadException(sprintf('Path "%s" is not valid', $path));
+        if (empty($files)) {
+            throw new UploadException('File array is not valid');
         }
         if (is_array($files['name'])) {
             $_files = [];
@@ -102,8 +192,9 @@ class Registry
     }
 
     /**
-     *
-     * @param array $files            
+     * 接收处理
+     * 
+     * @param array $files
      * @return FileInfo;
      */
     function _receive(array $info)
@@ -115,6 +206,12 @@ class Registry
         return $file;
     }
 
+    /**
+     * 验证文件
+     * 
+     * @param FileInfo $file
+     * @return boolean
+     */
     private function _validate(FileInfo $file)
     {
         foreach ($this->_rules as $rule) {
@@ -141,10 +238,11 @@ class Registry
         $dest = $this->_generateName($file);
         if (is_uploaded_file($tmpName)) {
             if (! file_exists($dest) || $this->_override) {
-                if (! @move_uploaded_file($tmpName, $dest)) {
+                if (! move_uploaded_file($tmpName, $dest)) {
                     throw new UploadException('Failed to move file');
                 }
                 $file->setPath($dest);
+                $file->hasError = false;
                 return true;
             } else {
                 $file->setErrorCode(ErrorStore::ERROR_SAME_NAME_FILE);
@@ -152,7 +250,7 @@ class Registry
                 return false;
             }
         }
-        throw new UploadException('Failed to move file');
+        throw new UploadException('Upload file is not valid');
     }
 
     /**
@@ -164,7 +262,7 @@ class Registry
     private function _generateName(FileInfo $file)
     {
         if ($this->_randName) {
-            $path = $this->_savePath . time() . rand(10, 99) . $file->getExtension();
+            $path = $this->_savePath . time() . rand(10, 99) . '.' . $file->getExtension();
         } else {
             $path = $this->_savePath . $file->getOriginName();
         }
