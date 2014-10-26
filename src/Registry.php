@@ -1,8 +1,7 @@
 <?php
 /**
- * 
- * @author Administrator
- *
+ * slince upload handler component
+ * @author Tao <taosikai@yeah.net>
  */
 namespace Slince\Upload;
 
@@ -13,39 +12,41 @@ use Slince\Upload\Exception\UploadException;
  */
 class Registry
 {
+
     private $_override = false;
-    
+
     private $_savePath = './';
-    
+
     private $_randName = false;
-    
+
     const RULE_SYS = 'sys';
-    
+
     const RULE_SIZE = 'size';
-    
+
     const RULE_MIME = 'mime';
-    
+
     const RULE_EXT = 'ext';
-    
+
     private $_rules = [];
-    
+
     private $_errorMsg = '';
-    
+
     function __construct($path = './')
     {
         $this->_savePath = $path;
         $this->addRule(RuleFactory::create(self::RULE_SYS));
     }
+
     function setOverride($val)
     {
         $this->_override = $val;
     }
-    
+
     function getOverride()
     {
         return $this->_override;
     }
-    
+
     function setSavePath($path)
     {
         if (! file_exists($path)) {
@@ -56,43 +57,56 @@ class Registry
         }
         $this->_savePath = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
     }
+
     function getSavePath()
     {
         return $this->_savePath;
     }
-    
+
     function setRandName($val)
     {
         $this->_randName = $val;
     }
-    
+
     function getRandName()
     {
         return $this->_randName;
     }
-    
+
     function addRule(RuleInterface $rule)
     {
         $this->_rules[] = $rule;
     }
+
     function process($files)
     {
         if (empty($file)) {
             throw new UploadException(sprintf('Path "%s" is not valid', $path));
         }
         if (is_array($files['name'])) {
-            
+            $_files = [];
+            foreach ($files['name'] as $key => $fileName) {
+                $_file = array(
+                    'error' => $files['error'][$key],
+                    'name' => $fileName,
+                    'size' => $files['size'][$key],
+                    'tmp_name' => $files['tmp_name'][$key],
+                    'type' => $files['type'][$key]
+                );
+                $_files[] = $this->_receive($_file);
+                return $_files;
+            }
         } else {
             return $this->_receive($files);
         }
     }
-    
+
     /**
-     * 
-     * @param array $files
+     *
+     * @param array $files            
      * @return FileInfo;
      */
-    function _receive(array $files)
+    function _receive(array $info)
     {
         $file = FileInfo::createFromArray($info);
         if ($this->_validate($file)) {
@@ -100,7 +114,7 @@ class Registry
         }
         return $file;
     }
-    
+
     private function _validate(FileInfo $file)
     {
         foreach ($this->_rules as $rule) {
@@ -112,12 +126,12 @@ class Registry
         }
         return true;
     }
-    
+
     /**
      * 移动文件
      * 非合法上传文件和因其它未知原因造成的无法移动会抛出异常
-     * 
-     * @param FileInfo $file
+     *
+     * @param FileInfo $file            
      * @return boolean
      * @throws UploadException
      */
@@ -140,11 +154,11 @@ class Registry
         }
         throw new UploadException('Failed to move file');
     }
-    
+
     /**
      * 生成新的保存路径
-     * 
-     * @param FileInfo $file
+     *
+     * @param FileInfo $file            
      * @return string
      */
     private function _generateName(FileInfo $file)

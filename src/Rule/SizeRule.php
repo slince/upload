@@ -1,8 +1,11 @@
 <?php
+/**
+ * slince upload handler library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Upload\Rule;
 
 use Slince\Upload\FileInfo;
-use Slince\Applicaion\EventStore;
 use Slince\Upload\ErrorStore;
 
 class SizeRule extends AbstractRule

@@ -1,4 +1,8 @@
 <?php
+/**
+ * slince upload handler library
+ * @author Tao <taosikai@yeah.net>
+ */
 namespace Slince\Upload;
 
 class FileInfo
@@ -22,12 +26,18 @@ class FileInfo
 
     private $_path = '';
 
-    function __construct($_F)
-    {}
+    function __construct(array $file)
+    {
+        $this->_tmpName = $file['tmp_name'];
+        $this->_originName = $file['name'];
+        $this->_error = $file['error'];
+        $this->_size = $file['size'];
+        $this->_type = $file['type'];
+    }
 
     static function createFromArray(array $info)
     {
-        return new self();
+        return new self($info);
     }
 
     function getSize()
@@ -36,7 +46,11 @@ class FileInfo
     }
 
     function getMimeType()
-    {}
+    {
+        $finfo = new \finfo(FILEINFO_MIME_TYPE, $this->_tmpName);
+        $mime = $finfo->file();
+        return $mime;
+    }
 
     function getOriginName()
     {
