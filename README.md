@@ -39,3 +39,5 @@
     } else {
         $newPath = $file->getPath();
     }
+    //*如果是多文件上传，那么Registry::process()返回的将是个数组
+     
