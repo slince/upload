@@ -239,7 +239,7 @@ class Registry
         $dest = $this->_generateName($file);
         if (is_uploaded_file($tmpName)) {
             if (! file_exists($dest) || $this->_override) {
-                if (! move_uploaded_file($tmpName, $dest)) {
+                if (! @move_uploaded_file($tmpName, $dest)) {
                     throw new UploadException('Failed to move file');
                 }
                 $file->setPath($dest);
