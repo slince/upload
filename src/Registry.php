@@ -71,7 +71,7 @@ class Registry
 
     function __construct($path = './')
     {
-        $this->_savePath = $path;
+        $this->setSavePath($path);
         $this->addRule(RuleFactory::create(self::RULE_SYS));
     }
 
