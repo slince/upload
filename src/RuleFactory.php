@@ -46,7 +46,6 @@ class RuleFactory
             }
             return $instance;
         } catch (\ReflectionException $e) {
-            echo $e->getMessage();exit;
             throw new UploadException(sprintf('Rule "%s" does not support', $type));
         }
     }

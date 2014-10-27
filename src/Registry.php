@@ -28,7 +28,7 @@ class Registry
     private $_savePath = './';
 
     /**
-     * 是否覆盖指示
+     * 是否随机名
      * 
      * @var boolean
      */
@@ -77,7 +77,7 @@ class Registry
 
     /**
      * 设置是否覆盖指示
-     * @param unknown $val
+     * @param boolean $val
      */
     function setOverride($val)
     {
