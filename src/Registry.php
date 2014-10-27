@@ -173,6 +173,7 @@ class Registry
         if (empty($files)) {
             throw new UploadException('File array is not valid');
         }
+        //多文件上传
         if (is_array($files['name'])) {
             $_files = [];
             foreach ($files['name'] as $key => $fileName) {
@@ -184,8 +185,8 @@ class Registry
                     'type' => $files['type'][$key]
                 );
                 $_files[] = $this->_receive($_file);
-                return $_files;
             }
+            return $_files;
         } else {
             return $this->_receive($files);
         }
