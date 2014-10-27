@@ -112,7 +112,7 @@ class Registry
     }
 
     /**
-     * 设置保存位置
+     * 获取保存位置
      * 
      * @return string
      */
