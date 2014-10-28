@@ -105,7 +105,7 @@ class Registry
         if (! file_exists($path)) {
             @mkdir($path, '0777', true);
         }
-        if (is_dir($path)) {
+        if (! is_dir($path)) {
             throw new UploadException(sprintf('Path "%s" is not valid', $path));
         }
         $this->_savePath = rtrim($path, '\\/') . DIRECTORY_SEPARATOR;
