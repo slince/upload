@@ -49,6 +49,13 @@ class FileInfo
      * @var int
      */
     private $_size;
+    
+    /**
+     * 文件mime类型
+     * 
+     * @var string
+     */
+    private $_mime;
 
     /**
      * 最终的错误码
@@ -108,9 +115,11 @@ class FileInfo
      */
     function getMimeType()
     {
-        $finfo = new \finfo(FILEINFO_MIME_TYPE);
-        $mime = $finfo->file($this->_tmpName);
-        return $mime;
+        if (is_null($this->_mime)) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $this->_mime = $finfo->file($this->_tmpName);
+        }
+        return $this->_mime;
     }
 
     /**
