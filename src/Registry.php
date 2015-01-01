@@ -103,7 +103,7 @@ class Registry
     function setSavePath($path)
     {
         if (! file_exists($path)) {
-            @mkdir($path, '0777', true);
+            @mkdir($path, 0777, true);
         }
         if (! is_dir($path)) {
             throw new UploadException(sprintf('Path "%s" is not valid', $path));
