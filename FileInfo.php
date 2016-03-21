@@ -20,71 +20,71 @@ class FileInfo
      *
      * @var string
      */
-    private $_tmpName;
+    private $tmpName;
 
     /**
      * 源文件名，保存在客户端的名称
      *
      * @var string
      */
-    private $_originName;
+    private $originName;
 
     /**
      * 上传过程中出现的错误
      *
      * @var int
      */
-    private $_error;
+    private $error;
 
     /**
      * 文件类型，没有检测，不使用
      *
      * @var string
      */
-    private $_type;
+    private $type;
 
     /**
      * 文件大小
      *
      * @var int
      */
-    private $_size;
+    private $size;
     
     /**
      * 文件mime类型
      * 
      * @var string
      */
-    private $_mime;
+    private $mime;
 
     /**
      * 最终的错误码
      *
      * @var int
      */
-    private $_errorCode;
+    private $errorCode;
 
     /**
      * 出现的错误信息
      *
      * @var string
      */
-    private $_errorMsg;
+    private $errorMsg;
 
     /**
      * 成功上传之后保存的文件路径
      *
      * @var string
      */
-    private $_path = '';
+    private $path = '';
 
     function __construct(array $file)
     {
-        $this->_tmpName = $file['tmp_name'];
-        $this->_originName = $file['name'];
-        $this->_error = $file['error'];
-        $this->_size = $file['size'];
-        $this->_type = $file['type'];
+        $this->tmpName = $file['tmp_name'];
+        $this->originName = $file['name'];
+        $this->error = $file['error'];
+        $this->size = $file['size'];
+        $this->type = $file['type'];
     }
 
     /**
@@ -105,7 +105,7 @@ class FileInfo
      */
     function getSize()
     {
-        return $this->_size;
+        return $this->size;
     }
 
     /**
@@ -115,11 +115,16 @@ class FileInfo
      */
     function getMimeType()
     {
-        if (is_null($this->_mime)) {
-            $finfo = new \finfo(FILEINFO_MIME_TYPE);
-            $this->_mime = $finfo->file($this->_tmpName);
+        if (is_null($this->mime)) {
+            if (class_exists('finfo')) {
+                $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                $this->mime = $finfo->file($this->tmpName);
+            } else {
+                $mime = MimeTypeStore::getMimeType($this->getExtension());
+                $this->mime = is_array($mime) ? reset($mime) : $mime;
+            }
         }
-        return $this->_mime;
+        return $this->mime;
     }
 
     /**
@@ -129,7 +134,7 @@ class FileInfo
      */
     function getExtension()
     {
-        return pathinfo($this->_originName, PATHINFO_EXTENSION);
+        return pathinfo($this->originName, PATHINFO_EXTENSION);
     }
 
     /**
@@ -139,7 +144,7 @@ class FileInfo
      */
     function getTmpName()
     {
-        return $this->_tmpName;
+        return $this->tmpName;
     }
 
     /**
@@ -149,7 +154,7 @@ class FileInfo
      */
     function getOriginName()
     {
-        return $this->_originName;
+        return $this->originName;
     }
 
     /**
@@ -159,7 +164,7 @@ class FileInfo
      */
     function getError()
     {
-        return $this->_error;
+        return $this->error;
     }
 
     /**
@@ -169,7 +174,7 @@ class FileInfo
      */
     function setErrorCode($code)
     {
-        $this->_errorCode = $code;
+        $this->errorCode = $code;
     }
 
     /**
@@ -179,7 +184,7 @@ class FileInfo
      */
     function getErrorCode()
     {
-        return $this->_errorCode;
+        return $this->errorCode;
     }
 
     /**
@@ -189,7 +194,7 @@ class FileInfo
      */
     function setErrorMsg($msg)
     {
-        $this->_errorMsg = $msg;
+        $this->errorMsg = $msg;
     }
 
     /**
@@ -199,7 +204,7 @@ class FileInfo
      */
     function getErrorMsg()
     {
-        return $this->_errorMsg;
+        return $this->errorMsg;
     }
 
     /**
@@ -209,7 +214,7 @@ class FileInfo
      */
     function setPath($path)
     {
-        $this->_path = $path;
+        $this->path = $path;
     }
 
     /**
@@ -219,6 +224,6 @@ class FileInfo
      */
     function getPath()
     {
-        return $this->_path;
+        return $this->path;
     }
 }
