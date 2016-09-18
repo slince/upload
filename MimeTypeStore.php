@@ -229,35 +229,33 @@ class MimeTypeStore
         'pkpass' => 'application/vnd.apple.pkpass',
         'ajax' => 'text/html'
     ];
-    
+
     /**
-     * 是否包含某个mime
-     * 
-     * @param string $mime
+     * 是否包含某个扩展名
+     * @param string $extension
+     * @return boolean
      */
-    static function extensionExist($extension)
+    public static function extensionExist($extension)
     {
         return isset(static::$mimeTypes[$extension]);
     }
-    
+
     /**
      * 根据扩展名获取mime
-     * 
      * @param string $extension
      * @param string $default
      * @return string
      */
-    static function getMimeType($extension, $default = null)
+    public static function getMimeType($extension, $default = null)
     {
         return static::extensionExist($extension) ? static::$mimeTypes[$extension] : $extension;
     }
-    
+
     /**
      * 获取所有的mime
-     * 
      * @return array
      */
-    static function getAll()
+    public static function getAll()
     {
         return static::$mimeTypes;
     }

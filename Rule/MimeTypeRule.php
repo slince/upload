@@ -11,22 +11,22 @@ use Slince\Upload\ErrorStore;
 class MimeTypeRule extends AbstractRule
 {
 
-    private $_allowTypes = [];
+    protected $allowTypes = [];
 
-    static $universalImages = [
+    public static $universalImages = [
         'image/gif',
         'image/jpeg',
         'image/png'
     ];
 
-    static $universalDocuments = [
+    public static $universalDocuments = [
         'text/plain',
         'application/msword',
         'application/vnd.ms-excel',
         'application/pdf'
     ];
 
-    static $universalFiles = [
+    public static $universalFiles = [
         'image/gif',
         'image/jpeg',
         'image/png',
@@ -36,20 +36,23 @@ class MimeTypeRule extends AbstractRule
         'application/pdf'
     ];
 
-    function __construct($allowType)
+    public function __construct($allowType)
     {
         if (is_array($allowType)) {
-            $this->_allowTypes = $allowType;
+            $this->allowTypes = $allowType;
         } else {
-            $this->_allowTypes[] = $allowType;
+            $this->allowTypes[] = $allowType;
         }
     }
 
-    function validate(FileInfo $file)
+    /**
+     * {@inheritdoc}
+     */
+    public function validate(FileInfo $file)
     {
-        if (! in_array($file->getMimeType(), $this->_allowTypes)) {
-            $this->_errorCode = ErrorStore::ERROR_CUSTOM_MIME_TYPE;
-            $this->_errorMsg = 'File type is not valid';
+        if (!in_array($file->getMimeType(), $this->allowTypes)) {
+            $this->errorCode = ErrorStore::ERROR_CUSTOM_MIME_TYPE;
+            $this->errorMsg = 'File type is not valid';
             return false;
         }
         return true;

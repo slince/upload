@@ -10,18 +10,24 @@ use Slince\Upload\ErrorStore;
 
 abstract class AbstractRule implements RuleInterface
 {
+    protected $errorMsg = 'No error';
 
-    protected $_errorMsg = 'No error';
+    protected $errorCode = ErrorStore::ERROR_OK;
 
-    protected $_errorCode = ErrorStore::ERROR_OK;
 
-    function getErrorMsg()
+    /**
+     * {@inheritdoc}
+     */
+    public function getErrorMsg()
     {
-        return $this->_errorMsg;
+        return $this->errorMsg;
     }
 
-    function getErrorCode()
+    /**
+     * {@inheritdoc}
+     */
+    public function getErrorCode()
     {
-        return $this->_errorCode;
+        return $this->errorCode;
     }
 }

@@ -11,7 +11,11 @@ use Slince\Upload\ErrorStore;
 class SysRule extends AbstractRule
 {
 
-    private $_msg = [
+    /**
+     * messages
+     * @var array
+     */
+    protected $messages = [
         ErrorStore::ERROR_INI_SIZE => 'File size exceeds the limit value in php.ini.',
         ErrorStore::ERROR_FROM_SIZE => 'File size exceeds the limit value in form',
         ErrorStore::ERROR_NO_TMP_DIR => 'Can not find a temporary directory',
@@ -20,11 +24,14 @@ class SysRule extends AbstractRule
         ErrorStore::ERROR_CANT_WRITE => 'File write failed'
     ];
 
-    function validate(FileInfo $file)
+    /**
+     * {@inheritdoc}
+     */
+    public function validate(FileInfo $file)
     {
         if (($code = $file->getError()) != 0) {
-            $this->_errorCode = $code;
-            $this->_errorMsg = $this->_msg[$code];
+            $this->errorCode = $code;
+            $this->errorMsg = $this->messages[$code];
             return false;
         }
         return true;

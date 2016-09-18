@@ -12,18 +12,18 @@ class RuleFactory
 {
     /**
      * 实例化验证规则
-     * 
+     *
      * @param string $type
      * @param array $args
      * @param string $msg
      * @throws UploadException
-     * @return object
+     * @return RuleInterface
      */
-    static function create($type, $args = null)
+    public static function create($type, $args = null)
     {
         $ruleClass = '';
         switch ($type) {
-            case Registry::RULE_SIZE :
+            case Registry::RULE_SIZE:
                 $ruleClass = 'SizeRule';
                 break;
             case Registry::RULE_MIME:
@@ -40,7 +40,7 @@ class RuleFactory
         try {
             $ruleReflection = new \ReflectionClass($ruleClass);
             if ($ruleReflection->getConstructor() != null) {
-                $instance = $ruleReflection->newInstanceArgs($args); 
+                $instance = $ruleReflection->newInstanceArgs($args);
             } else {
                 $instance = $ruleReflection->newInstanceWithoutConstructor();
             }

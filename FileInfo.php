@@ -10,75 +10,67 @@ class FileInfo
 
     /**
      * 是否上传失败
-     *
      * @var boolean
      */
     public $hasError = true;
 
     /**
      * 临时文件名
-     *
      * @var string
      */
-    private $tmpName;
+    protected $tmpName;
 
     /**
      * 源文件名，保存在客户端的名称
      *
      * @var string
      */
-    private $originName;
+    protected $originName;
 
     /**
      * 上传过程中出现的错误
-     *
      * @var int
      */
-    private $error;
+    protected $error;
 
     /**
      * 文件类型，没有检测，不使用
-     *
      * @var string
      */
-    private $type;
+    protected $type;
 
     /**
      * 文件大小
-     *
      * @var int
      */
-    private $size;
-    
+    protected $size;
+
     /**
      * 文件mime类型
-     * 
      * @var string
      */
-    private $mime;
+    protected $mime;
 
     /**
      * 最终的错误码
-     *
      * @var int
      */
-    private $errorCode;
+    protected $errorCode;
 
     /**
      * 出现的错误信息
-     *
      * @var string
      */
-    private $errorMsg;
+    protected $errorMsg;
 
     /**
      * 成功上传之后保存的文件路径
      *
      * @var string
      */
-    private $path = '';
+    protected $path = '';
 
-    function __construct(array $file)
+    public function __construct(array $file)
     {
         $this->tmpName = $file['tmp_name'];
         $this->originName = $file['name'];
@@ -89,13 +81,12 @@ class FileInfo
 
     /**
      * 根据信息数组获取实例
-     *
      * @param array $info
-     * @return \Slince\Upload\FileInfo
+     * @return FileInfo
      */
-    static function createFromArray(array $info)
+    public static function createFromArray(array $info)
     {
-        return new self($info);
+        return new static($info);
     }
 
     /**
@@ -103,17 +94,16 @@ class FileInfo
      *
      * @return int
      */
-    function getSize()
+    public function getSize()
     {
         return $this->size;
     }
 
     /**
      * 获取文件类型
-     *
      * @return string
      */
-    function getMimeType()
+    public function getMimeType()
     {
         if (is_null($this->mime)) {
             if (class_exists('finfo')) {
@@ -129,100 +119,90 @@ class FileInfo
 
     /**
      * 获取扩展名
-     *
      * @return string
      */
-    function getExtension()
+    public function getExtension()
     {
         return pathinfo($this->originName, PATHINFO_EXTENSION);
     }
 
     /**
      * 获取临时文件名
-     *
      * @return string
      */
-    function getTmpName()
+    public function getTmpName()
     {
         return $this->tmpName;
     }
 
     /**
      * 获取源文件名称
-     *
      * @return string
      */
-    function getOriginName()
+    public function getOriginName()
     {
         return $this->originName;
     }
 
     /**
      * 获取上传过程出现的错误
-     *
      * @return int
      */
-    function getError()
+    public function getError()
     {
         return $this->error;
     }
 
     /**
      * 设置最终错误代码
-     *
      * @param int $code
      */
-    function setErrorCode($code)
+    public function setErrorCode($code)
     {
         $this->errorCode = $code;
     }
 
     /**
      * 获取最终错误错误代码
-     *
      * @return int
      */
-    function getErrorCode()
+    public function getErrorCode()
     {
         return $this->errorCode;
     }
 
     /**
      * 设置错误信息
-     *
-     * @param string $msg 
+     * @param string $msg
      */
-    function setErrorMsg($msg)
+    public function setErrorMsg($msg)
     {
         $this->errorMsg = $msg;
     }
 
     /**
      * 设置错误信息
-     *
      * @return string
      */
-    function getErrorMsg()
+    public function getErrorMsg()
     {
         return $this->errorMsg;
     }
 
     /**
      * 设置最终文件路径
-     *
      * @param string $path
      */
-    function setPath($path)
+    public function setPath($path)
     {
         $this->path = $path;
     }
 
     /**
      * 获取最终文件路径
-     *
      * @return string
      */
-    function getPath()
+    public function getPath()
     {
         return $this->path;
     }
