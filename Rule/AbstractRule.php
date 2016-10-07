@@ -5,7 +5,6 @@
  */
 namespace Slince\Upload\Rule;
 
-use Slince\Upload\RuleInterface;
 use Slince\Upload\ErrorStore;
 
 abstract class AbstractRule implements RuleInterface
