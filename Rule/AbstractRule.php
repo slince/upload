@@ -9,10 +9,17 @@ use Slince\Upload\ErrorStore;
 
 abstract class AbstractRule implements RuleInterface
 {
-    protected $errorMsg = 'No error';
-
+    /**
+     * 错误码
+     * @var int
+     */
     protected $errorCode = ErrorStore::ERROR_OK;
 
+    /**
+     * 错误信息
+     * @var string
+     */
+    protected $errorMsg = 'No error';
 
     /**
      * {@inheritdoc}

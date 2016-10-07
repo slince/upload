@@ -10,9 +10,16 @@ use Slince\Upload\ErrorStore;
 
 class SizeRule extends AbstractRule
 {
-
+    /**
+     * 最大的文件大小
+     * @var int
+     */
     protected $maxSize;
 
+    /**
+     * 最小的文件大小
+     * @var int
+     */
     protected $minSize;
 
     public function __construct($start, $end = null)

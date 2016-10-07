@@ -8,7 +8,7 @@ namespace Slince\Upload\Rule;
 use Slince\Upload\FileInfo;
 use Slince\Upload\ErrorStore;
 
-class SysRule extends AbstractRule
+class SystemRule extends AbstractRule
 {
 
     /**

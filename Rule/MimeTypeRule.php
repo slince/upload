@@ -10,15 +10,26 @@ use Slince\Upload\ErrorStore;
 
 class MimeTypeRule extends AbstractRule
 {
-
+    /**
+     * 允许的文件类型
+     * @var array
+     */
     protected $allowTypes = [];
 
+    /**
+     * 常用的图片类型
+     * @var array
+     */
     public static $universalImages = [
         'image/gif',
         'image/jpeg',
         'image/png'
     ];
 
+    /**
+     * 常用的文档类型
+     * @var array
+     */
     public static $universalDocuments = [
         'text/plain',
         'application/msword',
@@ -26,6 +37,10 @@ class MimeTypeRule extends AbstractRule
         'application/pdf'
     ];
 
+    /**
+     * 常用的文件类型
+     * @var array
+     */
     public static $universalFiles = [
         'image/gif',
         'image/jpeg',

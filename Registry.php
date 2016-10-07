@@ -14,55 +14,23 @@ use Slince\Upload\Rule\RuleInterface;
  */
 class Registry
 {
-
     /**
      * 是否覆盖
-     *
      * @var boolean
      */
     protected $override = false;
 
     /**
      * 保存位置
-     *
      * @var string
      */
     protected $savePath = './';
 
     /**
      * 是否使用随机名
-     *
      * @var boolean
      */
     protected $isRandName;
-
-    /**
-     * 系统验证规则
-     *
-     * @var string
-     */
-    const RULE_SYS = 'sys';
-
-    /**
-     * 文件大小限制验证
-     *
-     * @var string
-     */
-    const RULE_SIZE = 'size';
-
-    /**
-     * 文件类型验证
-     *
-     * @var string
-     */
-    const RULE_MIME = 'mime';
-
-    /**
-     * 扩展名验证
-     *
-     * @var string
-     */
-    const RULE_EXT = 'ext';
 
     /**
      * 验证规则数组
@@ -76,7 +44,7 @@ class Registry
     public function __construct($path = './')
     {
         $this->setSavePath($path);
-        $this->addRule(RuleFactory::create(self::RULE_SYS));
+        $this->addRule(RuleFactory::create(RuleFactory::RULE_SYSTEM));
     }
 
     /**

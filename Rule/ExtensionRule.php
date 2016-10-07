@@ -10,15 +10,26 @@ use Slince\Upload\ErrorStore;
 
 class ExtensionRule extends AbstractRule
 {
-
+    /**
+     * 允许的扩展名
+     * @var array
+     */
     protected $allowExtensions = [];
 
+    /**
+     * 常用的图片扩展名
+     * @var array
+     */
     protected static $universalImages = [
         'gif',
         'jpg',
         'jpeg'
     ];
 
+    /**
+     * 常用的文档扩展名
+     * @var array
+     */
     protected static $universalDocuments = [
         'txt',
         'doc',
@@ -29,6 +40,10 @@ class ExtensionRule extends AbstractRule
         'pptx'
     ];
 
+    /**
+     * 常用的文件扩展名
+     * @var array
+     */
     protected static $universalFiles = [
         'gif',
         'jpg',
