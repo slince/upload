@@ -31,15 +31,15 @@
     });
     
     //设置文件大小限制
-    $registry->addRule(RuleFactory::create(Registry::RULE_SIZE), [80, 100]);
+    $registry->addRule(RuleFactory::create(RuleFactory::RULE_SIZE), [80, 100]);
     //如果你只打算设置上限
-    $registry->addRule(RuleFactory::create(Registry::RULE_SIZE), [100]);
+    $registry->addRule(RuleFactory::create(RuleFactory::RULE_SIZE), [100]);
 
     //设置文件类型限制
-    $registry->addRule(RuleFactory::create(Registry::RULE_MIME), [['image/jpeg', 'text/planin']]);
+    $registry->addRule(RuleFactory::create(RuleFactory::RULE_MIME_TYPE), [['image/jpeg', 'text/planin']]);
 
     //设置扩展名限制
-    $registry->addRule(RuleFactory::create(Registry::RULE_MIME), [['jpg', 'text']]);
+    $registry->addRule(RuleFactory::create(RuleFactory::RULE_MIME_TYPE), [['jpg', 'text']]);
    
     try {
         $file = $registry->process($_FILES['upload']);
