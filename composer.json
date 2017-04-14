@@ -1,6 +1,6 @@
 {
     "name": "slince/upload",
-    "description": "Handle file uploads with extensible and multiple validation rules",
+    "description": "Handle file uploads with multiple and extensible validation rules",
     "keywords": ["upload", "validation", "file", "file-upload"],
     "type": "library",
     "license": "MIT",
