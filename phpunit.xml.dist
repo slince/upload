@@ -18,6 +18,7 @@
                 <directory>./Tests</directory>
                 <directory>./vendor</directory>
                 <file>ErrorStore.php</file>
+                <file>RuleFactory.php</file>
             </exclude>
         </whitelist>
     </filter>

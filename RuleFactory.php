@@ -8,6 +8,9 @@ namespace Slince\Upload;
 use Slince\Upload\Exception\UploadException;
 use Slince\Upload\Rule\RuleInterface;
 
+/**
+ * @deprecated
+ */
 class RuleFactory
 {
     /**

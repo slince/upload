@@ -80,7 +80,7 @@ class FileInfoTest extends TestCase
     public function testSetHasError()
     {
         $fileInfo = $this->createInstance();
-        $this->assertTrue($fileInfo->hasError());
+        $this->assertNull($fileInfo->hasError());
         $fileInfo->setHasError(false);
         $this->assertFalse($fileInfo->hasError());
     }

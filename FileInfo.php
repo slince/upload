@@ -13,7 +13,7 @@ class FileInfo
      * has error
      * @var boolean
      */
-    public $hasError = true;
+    public $hasError;
 
     /**
      * tmp filename, $_FILES['upfile']['tmp_name']

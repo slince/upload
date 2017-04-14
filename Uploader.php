@@ -7,6 +7,7 @@ namespace Slince\Upload;
 
 use Slince\Upload\Exception\UploadException;
 use Slince\Upload\Rule\RuleInterface;
+use Slince\Upload\Rule\SystemRule;
 
 class Uploader
 {
@@ -26,7 +27,7 @@ class Uploader
      * Whether to enable random file name
      * @var boolean
      */
-    protected $isRandName;
+    protected $isRandName = false;
 
     /**
      * rules
@@ -34,12 +35,16 @@ class Uploader
      */
     protected $rules = [];
 
+    /**
+     * file name generator
+     * @var callable
+     */
     protected $filenameGenerator;
 
     public function __construct($path = './')
     {
         $this->setSavePath($path);
-        $this->addRule(RuleFactory::create(RuleFactory::RULE_SYSTEM));
+        $this->addRule(new SystemRule());
     }
 
     /**
@@ -182,7 +187,14 @@ class Uploader
     {
         $file = FileInfo::fromArray($info);
         if ($this->validateUpload($file)) {
-            $this->moveUploadFile($file);
+            $newFilePath = $this->generateFilename($file);
+            $result = $this->moveUploadedFile($file, $newFilePath);
+            if ($result) {
+                $file->setPath($newFilePath);
+                $file->setHasError(false);
+            } else {
+                $file->setHasError(true);
+            }
         }
         return $file;
     }
@@ -208,20 +220,18 @@ class Uploader
      * move file
      * Illegal upload files and other unsolicited causes can not be moved to throw an exception
      * @param FileInfo $file
+     * @param string $newFilePath
      * @return boolean
      * @throws UploadException
      */
-    protected function moveUploadFile(FileInfo $file)
+    protected function moveUploadedFile(FileInfo $file, $newFilePath)
     {
         $tmpName = $file->getTmpName();
-        $dst = $this->generateFilename($file);
         if (is_uploaded_file($tmpName)) {
-            if (!file_exists($dst) || $this->override) {
-                if (!@move_uploaded_file($tmpName, $dst)) {
+            if (!file_exists($newFilePath) || $this->override) {
+                if (!@move_uploaded_file($tmpName, $newFilePath)) {
                     throw new UploadException('Failed to move file');
                 }
-                $file->setPath($dst);
-                $file->hasError = false;
                 return true;
             } else {
                 $file->setErrorCode(ErrorStore::ERROR_SAME_NAME_FILE);
@@ -229,7 +239,7 @@ class Uploader
                 return false;
             }
         }
-        throw new UploadException('Upload file is not valid');
+        throw new UploadException('The uploaded file is invalid');
     }
 
     /**
