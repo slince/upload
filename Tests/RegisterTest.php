@@ -6,7 +6,7 @@ use Slince\Upload\Registry;
 
 class RegisterTest extends TestCase
 {
-    function testPolyfill()
+    public function testPolyfill()
     {
         $this->assertTrue(class_exists(Registry::class));
     }

@@ -57,8 +57,8 @@ $uploader->setOverride(true);
 $uploader->setIsRandName(true);
 
 //Customize the file path
-$uploader->setFilenameGenerator(function(FileInfo $file) use ($registry){
-    return $registry->getSavePath() . time() . $file->getOriginName();
+$uploader->setFilenameGenerator(function(FileInfo $file) use ($uploader){
+    return $uploader->getSavePath() . uniqid() . ".{$file->getExtension()}";
 });
 
 //Limit file size, Include boundary values;(unit: byte.) 

@@ -244,11 +244,11 @@ class MimeTypeStore
      * Get mime type based on the extension
      * @param string $extension
      * @param string $default
-     * @return string
+     * @return string|array
      */
     public static function getMimeType($extension, $default = null)
     {
-        return static::extensionExist($extension) ? static::$mimeTypes[$extension] : $extension;
+        return static::extensionExist($extension) ? static::$mimeTypes[$extension] : $default;
     }
 
     /**

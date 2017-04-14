@@ -134,7 +134,7 @@ class FileInfo
      */
     protected function detectMimeType()
     {
-        $mimeType = null;
+        $mimeType = false;
         if (class_exists('finfo')) {
             $finfo = new \finfo(FILEINFO_MIME_TYPE);
             $mimeType = $finfo->file($this->tmpName);
