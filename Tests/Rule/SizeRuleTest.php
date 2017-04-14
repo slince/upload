@@ -78,7 +78,7 @@ class SizeRuleTest extends TestCase
             'type' => 'application/x-zip-compressed',
             'tmp_name' =>'/path/to/foo.zip',
             'error' => 0,
-            'size' => PHP_INT_MIN,
+            'size' => - PHP_INT_MAX,
         ]);
         $result = $rule->validate($fileInfo);
         $this->assertTrue($result);
