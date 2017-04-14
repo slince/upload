@@ -1,4 +1,4 @@
-# Upload handler component
+# FileUpload
 
 [![Build Status](https://img.shields.io/travis/slince/upload/master.svg?style=flat-square)](https://travis-ci.org/slince/upload)
 [![Coverage Status](https://img.shields.io/codecov/c/github/slince/upload.svg?style=flat-square)](https://codecov.io/github/slince/upload)
