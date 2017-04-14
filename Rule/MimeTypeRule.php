@@ -11,52 +11,17 @@ use Slince\Upload\ErrorStore;
 class MimeTypeRule extends AbstractRule
 {
     /**
-     * 允许的文件类型
+     * allowed mime types
      * @var array
      */
-    protected $allowTypes = [];
+    protected $allowedTypes = [];
 
-    /**
-     * 常用的图片类型
-     * @var array
-     */
-    public static $universalImages = [
-        'image/gif',
-        'image/jpeg',
-        'image/png'
-    ];
-
-    /**
-     * 常用的文档类型
-     * @var array
-     */
-    public static $universalDocuments = [
-        'text/plain',
-        'application/msword',
-        'application/vnd.ms-excel',
-        'application/pdf'
-    ];
-
-    /**
-     * 常用的文件类型
-     * @var array
-     */
-    public static $universalFiles = [
-        'image/gif',
-        'image/jpeg',
-        'image/png',
-        'text/plain',
-        'application/msword',
-        'application/vnd.ms-excel',
-        'application/pdf'
-    ];
-
-    public function __construct($allowType)
+    public function __construct($allowedTypes)
     {
-        if (is_array($allowType)) {
-            $this->allowTypes = $allowType;
+        if (is_array($allowedTypes)) {
+            $this->allowedTypes = $allowedTypes;
         } else {
-            $this->allowTypes[] = $allowType;
+            $this->allowedTypes[] = $allowedTypes;
         }
     }
 
@@ -65,7 +30,17 @@ class MimeTypeRule extends AbstractRule
      */
     public function validate(FileInfo $file)
     {
-        if (!in_array($file->getMimeType(), $this->allowTypes)) {
+        $result = false;
+        foreach ($this->allowedTypes as $mimeType) {
+            if ($mimeType == $file->getMimeType()
+                || (strpos($mimeType, '*') !== false
+                    && explode('/', $mimeType)[0] == explode('/', $file->getMimeType())[0])
+            ) {
+                $result = true;
+                break;
+            }
+        }
+        if (!$result) {
             $this->errorCode = ErrorStore::ERROR_CUSTOM_MIME_TYPE;
             $this->errorMsg = 'File type is not valid';
             return false;

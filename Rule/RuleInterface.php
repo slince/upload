@@ -9,22 +9,21 @@ use Slince\Upload\FileInfo;
 
 interface RuleInterface
 {
-
     /**
-     * 验证规则
+     * validate
      * @param FileInfo $file
      * @return boolean
      */
     public function validate(FileInfo $file);
 
     /**
-     * 获取错误信息
+     * get error code
      * @return string
      */
     public function getErrorMsg();
 
     /**
-     * 获取错误代码
+     * get error message
      * @return int
      */
     public function getErrorCode();

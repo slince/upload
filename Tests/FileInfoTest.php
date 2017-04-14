@@ -6,6 +6,7 @@
 namespace Slince\Upload\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Slince\Upload\Exception\UploadException;
 use Slince\Upload\FileInfo;
 
 class FileInfoTest extends TestCase
@@ -89,5 +90,16 @@ class FileInfoTest extends TestCase
         $fileInfo = $this->createInstance();
         $mimeType = $fileInfo->getMimeType();
         $this->assertEquals('application/zip', $mimeType);
+    }
+
+    public function testInvalidArrayException()
+    {
+        $this->setExpectedException(UploadException::class);
+        new FileInfo([
+            'name' => 'thumb.zip',
+            'type' => 'application/x-zip-compressed',
+            'error' => 0,
+            'size' => 105190,
+        ]);
     }
 }

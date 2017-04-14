@@ -11,25 +11,21 @@ use Slince\Upload\ErrorStore;
 class SizeRule extends AbstractRule
 {
     /**
-     * 最大的文件大小
+     * Maximum file size
      * @var int
      */
     protected $maxSize;
 
     /**
-     * 最小的文件大小
+     * Minimum file size
      * @var int
      */
     protected $minSize;
 
-    public function __construct($start, $end = null)
+    public function __construct($minSize, $maxSize)
     {
-        if (is_null($end)) {
-            $this->maxSize = $start;
-        } else {
-            $this->minSize = $start;
-            $this->maxSize = $end;
-        }
+        $this->minSize = $minSize;
+        $this->maxSize = $maxSize;
     }
 
     /**
@@ -38,14 +34,12 @@ class SizeRule extends AbstractRule
     public function validate(FileInfo $file)
     {
         $size = $file->getSize();
-        $res = $size <= $this->maxSize;
-        if (!is_null($this->minSize)) {
-            $res = $size >= $this->minSize;
-        }
-        if (!$res) {
+        $result = (!$this->maxSize || $size <= $this->maxSize)
+            && (!$this->minSize || $size >= $this->minSize);
+        if (!$result) {
             $this->errorCode = ErrorStore::ERROR_CUSTOM_SIZE;
             $this->errorMsg = 'File size is not valid';
         }
-        return $res;
+        return $result;
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Slince\Upload;
 
+use Slince\Upload\Exception\UploadException;
+
 class FileInfo
 {
     /**
@@ -69,6 +71,14 @@ class FileInfo
 
     public function __construct(array $file)
     {
+        if (!isset($file['tmp_name'])
+            || !isset($file['name'])
+            || !isset($file['error'])
+            || !isset($file['size'])
+            || !isset($file['type'])
+        ) {
+            throw new UploadException("Invalid file array");
+        }
         $this->tmpName = $file['tmp_name'];
         $this->originName = $file['name'];
         $this->error = $file['error'];

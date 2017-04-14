@@ -1,12 +1,12 @@
 <?php
-use Slince\Upload\Registry;
+use Slince\Upload\Uploader;
 use Slince\Upload\Exception\UploadException;
 use Slince\Upload\FileInfo;
 use Slince\Upload\Rule\ExtensionRule;
 
 include __DIR__ . '/../vendor/autoload.php';
 
-$upload = new Registry();
+$upload = new Uploader();
 $upload->setFilenameGenerator(function (FileInfo $file) use ($upload) {
     return $upload->getSavePath() . time() . $file->getOriginName();
 });

@@ -2,15 +2,13 @@
 
 文件上传处理组件
 
-### 安装
+### Install
 
-在composer.json中添加
+Install via composer
 
-    {
-        "require": {
-            "slince/upload": "dev-master@dev"
-        }
-    }
+```
+composer require slince/upload
+```
 
 ### 用法
 

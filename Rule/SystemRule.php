@@ -10,7 +10,6 @@ use Slince\Upload\ErrorStore;
 
 class SystemRule extends AbstractRule
 {
-
     /**
      * messages
      * @var array
