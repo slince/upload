@@ -1,7 +1,6 @@
 <?php
 /**
- * slince upload handler component
- *
+ * slince upload handler library
  * @author Tao <taosikai@yeah.net>
  */
 namespace Slince\Upload;
@@ -9,33 +8,29 @@ namespace Slince\Upload;
 use Slince\Upload\Exception\UploadException;
 use Slince\Upload\Rule\RuleInterface;
 
-/**
- * 接收处理程序
- */
 class Registry
 {
     /**
-     * 是否覆盖
+     * Whether to overwrite if there is a file of the same name
      * @var boolean
      */
     protected $override = false;
 
     /**
-     * 保存位置
+     * save path
      * @var string
      */
     protected $savePath = './';
 
     /**
-     * 是否使用随机名
+     * Whether to enable random file name
      * @var boolean
      */
     protected $isRandName;
 
     /**
-     * 验证规则数组
-     *
-     * @var array
+     * rules
+     * @var RuleInterface[]
      */
     protected $rules = [];
 
@@ -48,16 +43,16 @@ class Registry
     }
 
     /**
-     * 设置是否覆盖指示
-     * @param boolean $val
+     * set override mode
+     * @param boolean $override
      */
-    public function setOverride($val)
+    public function setOverride($override)
     {
-        $this->override = $val;
+        $this->override = $override;
     }
 
     /**
-     * 是否覆盖
+     * get override mode
      * @return boolean
      */
     public function getOverride()
@@ -66,7 +61,7 @@ class Registry
     }
 
     /**
-     * 设置保存位置
+     * set save path
      * @param string $path
      * @throws UploadException
      */
@@ -82,7 +77,7 @@ class Registry
     }
 
     /**
-     * 获取保存位置
+     * get save path
      * @return string
      */
     public function getSavePath()
@@ -91,7 +86,7 @@ class Registry
     }
 
     /**
-     * 设置是否启用随机名
+     * set rand name mode
      * @param boolean $val
      */
     public function setIsRandName($val)
@@ -100,7 +95,7 @@ class Registry
     }
 
     /**
-     * 获取是否采用随机名
+     * get rand name mode
      * @return boolean
      */
     public function getIsRandName()
@@ -109,7 +104,7 @@ class Registry
     }
 
     /**
-     * 设置文件名生成器
+     * set filename generator
      * @param callable $generator
      */
     public function setFilenameGenerator(callable $generator)
@@ -118,16 +113,20 @@ class Registry
     }
 
     /**
-     * 获取当前文件名生成器
+     * get current filename generator
      * @return string
      */
     public function getFilenameGenerator()
     {
+        if (is_null($this->filenameGenerator)) {
+            $this->filenameGenerator = $this->isRandName ? $this->makeDefaultRandFilenameGenerator()
+                : $this->makeDefaultOriginFilenameGenerator();
+        }
         return $this->filenameGenerator;
     }
 
     /**
-     * 添加一个验证规则
+     * add rule
      * @param RuleInterface $rule
      */
     public function addRule(RuleInterface $rule)
@@ -136,7 +135,7 @@ class Registry
     }
 
     /**
-     * 获取所有的验证规则
+     * gets all rules
      * @return array
      */
     public function getRules()
@@ -145,7 +144,7 @@ class Registry
     }
 
     /**
-     * 处理上传
+     * go, process upload
      * @param array $files
      * @throws UploadException
      * @return FileInfo|FileInfo[];
@@ -155,33 +154,33 @@ class Registry
         if (empty($files)) {
             throw new UploadException('File array is not valid');
         }
-        // 多文件上传
+        //multi files
         if (is_array($files['name'])) {
             $_files = [];
             foreach ($files['name'] as $key => $fileName) {
-                $_file = array(
+                $file = array(
                     'error' => $files['error'][$key],
                     'name' => $fileName,
                     'size' => $files['size'][$key],
                     'tmp_name' => $files['tmp_name'][$key],
                     'type' => $files['type'][$key]
                 );
-                $_files[] = $this->receive($_file);
+                $_files[] = $this->processUpload($file);
             }
             return $_files;
         } else {
-            return $this->receive($files);
+            return $this->processUpload($files);
         }
     }
 
     /**
-     * 接收处理
+     * process
      * @param array $info
      * @return FileInfo;
      */
-    public function receive(array $info)
+    protected function processUpload(array $info)
     {
-        $file = FileInfo::createFromArray($info);
+        $file = FileInfo::fromArray($info);
         if ($this->validateUpload($file)) {
             $this->moveUploadFile($file);
         }
@@ -189,7 +188,7 @@ class Registry
     }
 
     /**
-     * 验证文件上传
+     * validate rules
      * @param FileInfo $file
      * @return boolean
      */
@@ -206,8 +205,8 @@ class Registry
     }
 
     /**
-     * 移动文件
-     * 非合法上传文件和因其它未知原因造成的无法移动会抛出异常
+     * move file
+     * Illegal upload files and other unsolicited causes can not be moved to throw an exception
      * @param FileInfo $file
      * @return boolean
      * @throws UploadException
@@ -215,13 +214,13 @@ class Registry
     protected function moveUploadFile(FileInfo $file)
     {
         $tmpName = $file->getTmpName();
-        $dest = $this->generateFilename($file);
+        $dst = $this->generateFilename($file);
         if (is_uploaded_file($tmpName)) {
-            if (!file_exists($dest) || $this->override) {
-                if (!@move_uploaded_file($tmpName, $dest)) {
+            if (!file_exists($dst) || $this->override) {
+                if (!@move_uploaded_file($tmpName, $dst)) {
                     throw new UploadException('Failed to move file');
                 }
-                $file->setPath($dest);
+                $file->setPath($dst);
                 $file->hasError = false;
                 return true;
             } else {
@@ -234,10 +233,10 @@ class Registry
     }
 
     /**
-     * 获取默认的文件名生成器
+     * make default rand filename generator
      * @return callable
      */
-    protected function getDefaultRandFilenameGenerator()
+    protected function makeDefaultRandFilenameGenerator()
     {
         return function (FileInfo $file) {
             return $this->savePath . time() . rand(10, 99) . '.' . $file->getExtension();
@@ -245,10 +244,10 @@ class Registry
     }
 
     /**
-     * 获取默认的源文件名路径生成器
+     * make default origin filename generator
      * @return callable
      */
-    protected function getDefaultOriginFilenameGenerator()
+    protected function makeDefaultOriginFilenameGenerator()
     {
         return function (FileInfo $file) {
             return $this->savePath . $file->getOriginName();
@@ -256,20 +255,14 @@ class Registry
     }
 
     /**
-     * 生成新的文件名
+     * make new filepath
      * @param FileInfo $file
      * @return string
      */
     protected function generateFilename(FileInfo $file)
     {
-        if (is_null($this->filenameGenerator)) {
-            if ($this->isRandName) {
-                $this->filenameGenerator = $this->getDefaultRandFilenameGenerator();
-            } else {
-                $this->filenameGenerator = $this->getDefaultOriginFilenameGenerator();
-            }
-        }
-        $path = call_user_func($this->filenameGenerator, $file);
+        $generator = $this->getFilenameGenerator();
+        $path = call_user_func($generator, $file);
         return $path;
     }
 }

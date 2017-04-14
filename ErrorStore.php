@@ -5,70 +5,70 @@
  */
 namespace Slince\Upload;
 
-class ErrorStore
+final class ErrorStore
 {
     /**
-     * 没有错误
+     * no error
      * @var int
      */
     const ERROR_OK = UPLOAD_ERR_OK;
 
     /**
-     * 文件大小超过php.ini设置上限
+     * The file size exceeds the php.ini setting limit
      * @var int
      */
     const ERROR_INI_SIZE = UPLOAD_ERR_INI_SIZE;
 
     /**
-     * 文件大小超过表单设置上限
+     * The file size exceeds the form setting limit
      * @var int
      */
     const ERROR_FROM_SIZE = UPLOAD_ERR_FORM_SIZE;
 
     /**
-     * 部分文件被上传
+     * Only uploaded some of the files
      * @var int
      */
     const ERROR_PARTIAL = UPLOAD_ERR_PARTIAL;
 
     /**
-     * 没有文件被上传
+     * No files are uploaded
      * @var int
      */
     const ERROR_NO_FILE = UPLOAD_ERR_NO_FILE;
 
     /**
-     * 没有找到临时目录
+     * No temporary directory found
      * @var int
      */
     const ERROR_NO_TMP_DIR = UPLOAD_ERR_NO_TMP_DIR;
 
     /**
-     * 文件写入失败
+     * Can not write file
      * @var int
      */
     const ERROR_CANT_WRITE = UPLOAD_ERR_CANT_WRITE;
 
     /**
-     * 文件大小不在自定义范围内
+     * The file size is not within the custom range
      * @var int
      */
     const ERROR_CUSTOM_SIZE = 10;
 
     /**
-     * 文件类型不在自定义范围内
+     * The file type is not within the custom range
      * @var int
      */
     const ERROR_CUSTOM_MIME_TYPE = 11;
 
     /**
-     * 文件扩展名不在自定义范围内
+     * The file extension is not within the custom range
      * @var int
      */
     const ERROR_CUSTOM_EXT = 12;
 
     /**
-     * 保存位置存在同名文件
+     * There is a file with the same name
      * @var int
      */
     const ERROR_SAME_NAME_FILE = 13;

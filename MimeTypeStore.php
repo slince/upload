@@ -231,7 +231,7 @@ class MimeTypeStore
     ];
 
     /**
-     * 是否包含某个扩展名
+     * Whether there is an extension
      * @param string $extension
      * @return boolean
      */
@@ -241,7 +241,7 @@ class MimeTypeStore
     }
 
     /**
-     * 根据扩展名获取mime
+     * Get mime type based on the extension
      * @param string $extension
      * @param string $default
      * @return string
@@ -252,7 +252,7 @@ class MimeTypeStore
     }
 
     /**
-     * 获取所有的mime
+     * gets all mime types
      * @return array
      */
     public static function getAll()

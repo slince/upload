@@ -7,68 +7,65 @@ namespace Slince\Upload;
 
 class FileInfo
 {
-
     /**
-     * 是否上传失败
+     * has error
      * @var boolean
      */
     public $hasError = true;
 
     /**
-     * 临时文件名
+     * tmp filename, $_FILES['upfile']['tmp_name']
      * @var string
      */
     protected $tmpName;
 
     /**
-     * 源文件名，保存在客户端的名称
-     *
+     * Original file name(the name saved on the client); $_FILES['upfile']['name']
      * @var string
      */
     protected $originName;
 
     /**
-     * 上传过程中出现的错误
+     * errors;$_FILES['error']
      * @var int
      */
     protected $error;
 
     /**
-     * 文件类型，没有检测，不使用
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * 文件大小
+     * file size(bytes);$_FILES['upfile']['size']
      * @var int
      */
     protected $size;
 
     /**
-     * 文件mime类型
+     * file type;$_FILES['upfile']['type']
      * @var string
      */
-    protected $mime;
+    protected $type;
 
     /**
-     * 最终的错误码
+     * file mime type
+     * @var string
+     */
+    protected $mimeType;
+
+    /**
+     * error code
      * @var int
      */
     protected $errorCode;
 
     /**
-     * 出现的错误信息
+     * error message
      * @var string
      */
     protected $errorMsg;
 
     /**
-     * 成功上传之后保存的文件路径
-     *
+     * The file path after upload
      * @var string
      */
-    protected $path = '';
+    protected $path;
 
     public function __construct(array $file)
     {
@@ -80,9 +77,20 @@ class FileInfo
     }
 
     /**
-     * 根据信息数组获取实例
+     * Create instance from array
      * @param array $info
      * @return FileInfo
+     */
+    public static function fromArray(array $info)
+    {
+        return static::createFromArray($info);
+    }
+
+    /**
+     * Create instance from array
+     * @param array $info
+     * @return FileInfo
+     * @deprecated
      */
     public static function createFromArray(array $info)
     {
@@ -90,8 +98,7 @@ class FileInfo
     }
 
     /**
-     * 获取文件大小
-     *
+     * gets file size
      * @return int
      */
     public function getSize()
@@ -100,25 +107,37 @@ class FileInfo
     }
 
     /**
-     * 获取文件类型
+     * gets file mime type
      * @return string
      */
     public function getMimeType()
     {
-        if (is_null($this->mime)) {
-            if (class_exists('finfo')) {
-                $finfo = new \finfo(FILEINFO_MIME_TYPE);
-                $this->mime = $finfo->file($this->tmpName);
-            } else {
-                $mime = MimeTypeStore::getMimeType($this->getExtension());
-                $this->mime = is_array($mime) ? reset($mime) : $mime;
-            }
+        if (is_null($this->mimeType)) {
+            $this->mimeType = $this->detectMimeType();
         }
-        return $this->mime;
+        return $this->mimeType;
     }
 
     /**
-     * 获取扩展名
+     * detect file mime type
+     * @return string
+     */
+    protected function detectMimeType()
+    {
+        $mimeType = null;
+        if (class_exists('finfo')) {
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->file($this->tmpName);
+        }
+        if (!$mimeType)  {
+            $mimeType = MimeTypeStore::getMimeType($this->getExtension());
+            $mimeType = is_array($mimeType) ? reset($mimeType) : $mimeType;
+        }
+        return $mimeType;
+    }
+
+    /**
+     * gets file extension
      * @return string
      */
     public function getExtension()
@@ -127,7 +146,7 @@ class FileInfo
     }
 
     /**
-     * 获取临时文件名
+     * gets file tmp name
      * @return string
      */
     public function getTmpName()
@@ -136,7 +155,7 @@ class FileInfo
     }
 
     /**
-     * 获取源文件名称
+     * gets original file name
      * @return string
      */
     public function getOriginName()
@@ -145,7 +164,16 @@ class FileInfo
     }
 
     /**
-     * 获取上传过程出现的错误
+     * gets file type
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * gets error($_FILES['upfile']['error'])
      * @return int
      */
     public function getError()
@@ -154,7 +182,7 @@ class FileInfo
     }
 
     /**
-     * 设置最终错误代码
+     * set error code
      * @param int $code
      */
     public function setErrorCode($code)
@@ -163,7 +191,7 @@ class FileInfo
     }
 
     /**
-     * 获取最终错误错误代码
+     * gets final error code
      * @return int
      */
     public function getErrorCode()
@@ -172,7 +200,7 @@ class FileInfo
     }
 
     /**
-     * 设置错误信息
+     * set error message
      * @param string $msg
      */
     public function setErrorMsg($msg)
@@ -181,7 +209,7 @@ class FileInfo
     }
 
     /**
-     * 设置错误信息
+     * get error message
      * @return string
      */
     public function getErrorMsg()
@@ -190,7 +218,7 @@ class FileInfo
     }
 
     /**
-     * 设置最终文件路径
+     * set file path
      * @param string $path
      */
     public function setPath($path)
@@ -199,11 +227,29 @@ class FileInfo
     }
 
     /**
-     * 获取最终文件路径
+     * get file path
      * @return string
      */
     public function getPath()
     {
         return $this->path;
+    }
+
+    /**
+     * whether there is an error
+     * @return bool
+     */
+    public function hasError()
+    {
+        return $this->hasError;
+    }
+
+    /**
+     * set has error
+     * @param $result
+     */
+    public function setHasError($result)
+    {
+        $this->hasError = $result;
     }
 }
