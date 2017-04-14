@@ -22,10 +22,19 @@ class SizeRule extends AbstractRule
      */
     protected $minSize;
 
+    /**
+     * Limit file size (use "B", "K", M", or "G")
+     * @param int|string $minSize
+     * @param int|string $maxSize
+     */
     public function __construct($minSize, $maxSize)
     {
-        $this->minSize = $minSize;
-        $this->maxSize = $maxSize;
+        if ($minSize) {
+            $this->minSize = FileInfo::humanReadableToBytes($minSize);
+        }
+        if ($maxSize) {
+            $this->maxSize = FileInfo::humanReadableToBytes($maxSize);
+        }
     }
 
     /**

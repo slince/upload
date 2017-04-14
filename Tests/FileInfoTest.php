@@ -102,4 +102,10 @@ class FileInfoTest extends TestCase
             'size' => 105190,
         ]);
     }
+
+    public function testConvertHumanReadableSize()
+    {
+        $size = '5M';
+        $this->assertEquals(5 * 1024 * 1024, FileInfo::humanReadableToBytes($size));
+    }
 }
