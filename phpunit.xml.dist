@@ -19,6 +19,7 @@
                 <directory>./vendor</directory>
                 <file>ErrorStore.php</file>
                 <file>RuleFactory.php</file>
+                <file>Registry.php</file>
             </exclude>
         </whitelist>
     </filter>

@@ -1,7 +1,6 @@
 <?php
 namespace Slince\Upload\Tests\Rule;
 
-
 use PHPUnit\Framework\TestCase;
 use Slince\Upload\FileInfo;
 use Slince\Upload\Rule\MimeTypeRule;

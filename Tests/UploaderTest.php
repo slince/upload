@@ -25,7 +25,7 @@ class UploaderTest extends TestCase
     public function testGetFilenameGenerator()
     {
         $uploader = new Uploader();
-        $callback = function(FileInfo $fileInfo){
+        $callback = function (FileInfo $fileInfo) {
             return '/dst/' . $fileInfo->getOriginName();
         };
 
@@ -89,7 +89,7 @@ class UploaderTest extends TestCase
             'size' => 105190,
         ];
 
-        $uploader->setFilenameGenerator(function(FileInfo $fileInfo){
+        $uploader->setFilenameGenerator(function (FileInfo $fileInfo) {
             return 'foo-bar.ext';
         });
 

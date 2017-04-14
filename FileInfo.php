@@ -139,7 +139,7 @@ class FileInfo
             $finfo = new \finfo(FILEINFO_MIME_TYPE);
             $mimeType = $finfo->file($this->tmpName);
         }
-        if (!$mimeType)  {
+        if (!$mimeType) {
             $mimeType = MimeTypeStore::getMimeType($this->getExtension());
             $mimeType = is_array($mimeType) ? reset($mimeType) : $mimeType;
         }
