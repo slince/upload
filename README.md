@@ -28,7 +28,7 @@ Assume a file is uploaded with this HTML form:
 
 - Basic usage
 ```
-use Slince\Upload\Registry;
+use Slince\Upload\Uploader;
 use Slince\Upload\Exception\UploadException;
 use Slince\Upload\FileInfo;
 
