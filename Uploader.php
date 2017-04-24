@@ -12,13 +12,13 @@ use Slince\Upload\Rule\SystemRule;
 class Uploader
 {
     /**
-     * Whether to overwrite if there is a file of the same name
+     * Whether to overwrite if there is a file with the same name
      * @var boolean
      */
     protected $override = false;
 
     /**
-     * save path
+     * The save path of the uploaded files
      * @var string
      */
     protected $savePath = './';
@@ -30,13 +30,13 @@ class Uploader
     protected $isRandName = false;
 
     /**
-     * rules
+     * The rules collection
      * @var RuleInterface[]
      */
     protected $rules = [];
 
     /**
-     * file name generator
+     * File name generator
      * @var callable
      */
     protected $filenameGenerator;
@@ -48,7 +48,7 @@ class Uploader
     }
 
     /**
-     * set override mode
+     * Sets override mode
      * @param boolean $override
      */
     public function setOverride($override)
@@ -57,7 +57,7 @@ class Uploader
     }
 
     /**
-     * get override mode
+     * Gets whether to enabled override mode
      * @return boolean
      */
     public function getOverride()
@@ -66,7 +66,7 @@ class Uploader
     }
 
     /**
-     * set save path
+     * Set save path for uploaded files
      * @param string $path
      * @throws UploadException
      */
@@ -82,7 +82,7 @@ class Uploader
     }
 
     /**
-     * get save path
+     * Get the save path of uploaded files
      * @return string
      */
     public function getSavePath()
@@ -91,25 +91,45 @@ class Uploader
     }
 
     /**
-     * set rand name mode
-     * @param boolean $val
+     * Sets whether to enable rand-name mode
+     * @param $result
      */
-    public function setIsRandName($val)
+    public function setRandName($result)
     {
-        $this->isRandName = $val;
+        $this->isRandName = (boolean)$result;
     }
 
     /**
-     * get rand name mode
+     * Sets whether to enable rand-name mode
+     * @param boolean $result
+     * @deprecated Use "setRandName" instead
+     */
+    public function setIsRandName($result)
+    {
+        $this->setRandName($result);
+    }
+
+    /**
+     * Checks whether the rand-name mode is used
      * @return boolean
      */
-    public function getIsRandName()
+    public function isRandName()
     {
         return $this->isRandName;
     }
 
     /**
-     * set filename generator
+     * Checks whether the rand-name mode is used
+     * @return boolean
+     * @deprecated Use "isRandName" instead
+     */
+    public function getIsRandName()
+    {
+        return $this->isRandName();
+    }
+
+    /**
+     * Set filename generator
      * @param callable $generator
      */
     public function setFilenameGenerator(callable $generator)
@@ -118,7 +138,7 @@ class Uploader
     }
 
     /**
-     * get current filename generator
+     * Gets the current filename generator
      * @return string
      */
     public function getFilenameGenerator()
@@ -131,7 +151,7 @@ class Uploader
     }
 
     /**
-     * add rule
+     * Add a rule
      * @param RuleInterface $rule
      */
     public function addRule(RuleInterface $rule)
@@ -140,7 +160,7 @@ class Uploader
     }
 
     /**
-     * gets all rules
+     * Gets all rules
      * @return array
      */
     public function getRules()
@@ -149,7 +169,7 @@ class Uploader
     }
 
     /**
-     * go, process upload
+     * Process upload
      * @param array $files
      * @throws UploadException
      * @return FileInfo|FileInfo[];
@@ -179,14 +199,14 @@ class Uploader
     }
 
     /**
-     * process
+     * Process the uploaded file
      * @param array $info
      * @return FileInfo;
      */
     protected function processUpload(array $info)
     {
         $file = FileInfo::fromArray($info);
-        if ($this->validateUpload($file)) {
+        if ($this->validateUploadFile($file)) {
             $newFilePath = $this->generateFilename($file);
             $result = $this->moveUploadedFile($file, $newFilePath);
             if ($result) {
@@ -200,11 +220,11 @@ class Uploader
     }
 
     /**
-     * validate rules
+     * Validates the uploaded file
      * @param FileInfo $file
      * @return boolean
      */
-    protected function validateUpload(FileInfo $file)
+    protected function validateUploadFile(FileInfo $file)
     {
         foreach ($this->rules as $rule) {
             if (!$rule->validate($file)) {
@@ -217,7 +237,7 @@ class Uploader
     }
 
     /**
-     * move file
+     * Moves the uploaded file
      * Illegal upload files and other unsolicited causes can not be moved to throw an exception
      * @param FileInfo $file
      * @param string $newFilePath
@@ -243,7 +263,7 @@ class Uploader
     }
 
     /**
-     * make default rand filename generator
+     * Makes default rand filename generator
      * @return callable
      */
     protected function makeDefaultRandFilenameGenerator()
@@ -254,7 +274,7 @@ class Uploader
     }
 
     /**
-     * make default origin filename generator
+     * Makes default origin filename generator
      * @return callable
      */
     protected function makeDefaultOriginFilenameGenerator()
@@ -265,7 +285,7 @@ class Uploader
     }
 
     /**
-     * make new filepath
+     * Generates an new file path
      * @param FileInfo $file
      * @return string
      */

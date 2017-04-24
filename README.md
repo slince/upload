@@ -40,6 +40,8 @@ try {
     if ($fileInfo->hasError()) {
         echo $fileInfo->getErrorCode();
         echo $fileInfo->getErrorMsg();
+    } else {
+        echo $fileInfo->getPath(); //Gets the saved path of the uploaded file
     }
 } catch (UploadException $exception) {
      exit($e->getMessage());
@@ -54,7 +56,7 @@ try {
 $uploader->setOverride(true);
 
 //Generate new file name using random mode
-$uploader->setIsRandName(true);
+$uploader->setRandName(true);
 
 //Customize the file path
 $uploader->setFilenameGenerator(function(FileInfo $file) use ($uploader){

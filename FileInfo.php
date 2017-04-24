@@ -93,7 +93,7 @@ class FileInfo
      */
     public static function fromArray(array $info)
     {
-        return static::createFromArray($info);
+        return new static($info);
     }
 
     /**
@@ -104,7 +104,7 @@ class FileInfo
      */
     public static function createFromArray(array $info)
     {
-        return new static($info);
+        return static::fromArray($info);
     }
 
     /**
