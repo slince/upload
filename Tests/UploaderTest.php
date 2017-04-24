@@ -12,16 +12,13 @@ class UploaderTest extends TestCase
     {
         $uploader = new Uploader();
         $this->assertFalse($uploader->getOverride());
-        $this->assertFalse($uploader->getIsRandName());
         $this->assertFalse($uploader->isRandName());
 
         $uploader->setSavePath('./dst');
         $uploader->setOverride(true);
         $uploader->setRandName(true);
-        $uploader->setIsRandName(true);
         $this->assertEquals('./dst' . DIRECTORY_SEPARATOR, $uploader->getSavePath());
         $this->assertTrue($uploader->getOverride());
-        $this->assertTrue($uploader->getIsRandName());
         $this->assertTrue($uploader->isRandName());
     }
 
@@ -50,7 +47,6 @@ class UploaderTest extends TestCase
         $uploader = $this->createUploaderMock();
         $uploader->setSavePath(__DIR__ . '/Fixtures/dst');
         $uploader->setRandName(true);
-        $uploader->setIsRandName(true);
         $fileArray = [
             'name' => 'thumb.zip',
             'type' => 'application/x-zip-compressed',

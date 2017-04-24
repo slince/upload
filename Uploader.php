@@ -18,7 +18,7 @@ class Uploader
     protected $override = false;
 
     /**
-     * The save path of the uploaded files
+     * The saved path of the uploaded files
      * @var string
      */
     protected $savePath = './';
@@ -66,7 +66,7 @@ class Uploader
     }
 
     /**
-     * Set save path for uploaded files
+     * Set saved path for uploaded files
      * @param string $path
      * @throws UploadException
      */
@@ -82,7 +82,7 @@ class Uploader
     }
 
     /**
-     * Get the save path of uploaded files
+     * Get the saved path of uploaded files
      * @return string
      */
     public function getSavePath()
@@ -206,7 +206,7 @@ class Uploader
     protected function processUpload(array $info)
     {
         $file = FileInfo::fromArray($info);
-        if ($this->validateUploadFile($file)) {
+        if ($this->validateUploadedFile($file)) {
             $newFilePath = $this->generateFilename($file);
             $result = $this->moveUploadedFile($file, $newFilePath);
             if ($result) {
@@ -224,7 +224,7 @@ class Uploader
      * @param FileInfo $file
      * @return boolean
      */
-    protected function validateUploadFile(FileInfo $file)
+    protected function validateUploadedFile(FileInfo $file)
     {
         foreach ($this->rules as $rule) {
             if (!$rule->validate($file)) {
