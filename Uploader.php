@@ -212,9 +212,9 @@ class Uploader
             if ($result) {
                 $file->setPath($newFilePath);
                 $file->setHasError(false);
-            } else {
-                $file->setHasError(true);
             }
+        } else {
+            $file->setHasError(true);
         }
         return $file;
     }
@@ -241,8 +241,8 @@ class Uploader
      * Illegal upload files and other unsolicited causes can not be moved to throw an exception
      * @param FileInfo $file
      * @param string $newFilePath
-     * @return boolean
      * @throws UploadException
+     * @return boolean
      */
     protected function moveUploadedFile(FileInfo $file, $newFilePath)
     {
@@ -254,9 +254,7 @@ class Uploader
                 }
                 return true;
             } else {
-                $file->setErrorCode(ErrorStore::ERROR_SAME_NAME_FILE);
-                $file->setErrorMsg(sprintf('File "%s" already exists', $file->getOriginName()));
-                return false;
+                throw new UploadException(sprintf('File "%s" already exists', $file->getOriginName()), ErrorStore::ERROR_SAME_NAME_FILE);
             }
         }
         throw new UploadException('The uploaded file is invalid');

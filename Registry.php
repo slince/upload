@@ -1,2 +1,13 @@
 <?php
-class_alias('Slince\Upload\Uploader', 'Slince\Upload\Registry');
+/**
+ * slince upload handler library
+ * @author Tao <taosikai@yeah.net>
+ */
+namespace Slince\Upload;
+
+/**
+ * @deprecated
+ */
+class Registry extends Uploader
+{
+}
