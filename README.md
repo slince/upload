@@ -19,7 +19,7 @@ composer require slince/upload
 
 Assume a file is uploaded with this HTML form:
 
-```
+```html
 <form method="POST" enctype="multipart/form-data">
     <input type="file" name="foo" value=""/>
     <input type="submit" value="Upload File"/>
@@ -27,7 +27,8 @@ Assume a file is uploaded with this HTML form:
 ```
 
 - Basic usage
-```
+
+```php
 use Slince\Upload\Uploader;
 use Slince\Upload\Exception\UploadException;
 use Slince\Upload\FileInfo;
@@ -51,7 +52,7 @@ try {
 
 - Advanced usage
 
-```
+```php
 //Override old files if there is a file of the same name  
 $uploader->setOverride(true);
 
@@ -77,7 +78,7 @@ $uploader->addRule(new ExtensionRule(['jpg', 'text']));
 
 - Multi-file upload  
 
-```
+```html
 <form method="POST" enctype="multipart/form-data">
     <input type="file" name="foo[]" value=""/>
     <input type="file" name="foo[]" value=""/>
@@ -86,7 +87,7 @@ $uploader->addRule(new ExtensionRule(['jpg', 'text']));
 ```
 `$uploader->process($_FILES['foo'])` will return an array containing all the fileinfo
 
-```
+```php
 try {
     $fileInfos = $uploader->process($_FILES['foo']);
     var_dump($fileInfos);
