@@ -12,6 +12,8 @@ class TempTest extends TestCase
     {
         $filepath = __DIR__ . '/../Fixtures/hello.txt';
         $copyFilePath = __DIR__ . '/../Fixtures/hello-tmp.txt';
+        $dstFilePath = sys_get_temp_dir() . '/hello-3.txt';
+        @unlink($dstFilePath);
         copy($filepath, $copyFilePath);
         $file = new UploadedFile(
             $copyFilePath,
@@ -22,6 +24,7 @@ class TempTest extends TestCase
         );
 
         $temp = new Temp();
-        $temp->upload('hello-3.txt', $file);
+        $file = $temp->upload('hello-3.txt', $file);
+        $this->assertContains(sys_get_temp_dir(), $file->getPathname());
     }
 }

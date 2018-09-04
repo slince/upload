@@ -37,6 +37,7 @@ final class Validator
      * Validate the file
      *
      * @param UploadedFile $file
+     * @return true
      * @throws ConstraintException
      */
     public function validate(UploadedFile $file)
@@ -46,5 +47,6 @@ final class Validator
                 throw new ConstraintException($constraint, $file);
             }
         }
+        return true;
     }
 }

@@ -12,6 +12,8 @@ class LocalTest extends TestCase
     {
         $filepath = __DIR__ . '/../Fixtures/hello.txt';
         $copyFilePath = __DIR__ . '/../Fixtures/hello-tmp.txt';
+        $dstFilePath = __DIR__ . '/../Fixtures/dst/hello-2.txt';
+        @unlink($dstFilePath);
         copy($filepath, $copyFilePath);
         $file = new UploadedFile(
             $copyFilePath,
@@ -21,7 +23,14 @@ class LocalTest extends TestCase
             true
         );
         $local = new Local(__DIR__ . '/../Fixtures/dst/');
-        $file = $local->upload('hello-2.txt', $file);
-        $this->assertContains(sys_get_temp_dir(), $file->getPathname());
+        $local->upload('hello-2.txt', $file);
+
+        $this->assertFileExists($dstFilePath);
+    }
+
+    public function testException()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        new Local(__DIR__ . '/../Fixtures/not-exist/');
     }
 }
