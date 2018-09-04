@@ -49,7 +49,7 @@ class SizeConstraint implements ConstraintInterface
     {
         $size = method_exists($file, 'getClientSize') ?
             $file->getClientSize() : $file->getSize();
-
+        
         return ($this->maxSize === null || $size <= $this->maxSize)
             && ($this->minSize === null || $size >= $this->minSize);
     }

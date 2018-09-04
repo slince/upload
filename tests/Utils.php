@@ -17,13 +17,27 @@ final class Utils
             @unlink($dstFilePath);
         }
         @copy($filepath, $copyFilePath);
-        $file = new UploadedFile(
-            $copyFilePath,
-            $name,
-            'text/plain',
-            null,
-            true
-        );
+
+        $reflection = new \ReflectionClass(UploadedFile::class);
+        if ($reflection->getConstructor()->getNumberOfParameters() === 5) {
+            $file = new UploadedFile(
+                $copyFilePath,
+                $name,
+                'text/plain',
+                null,
+                true
+            );
+        } else {
+            $file = new UploadedFile(
+                $copyFilePath,
+                $name,
+                'text/plain',
+                filesize($copyFilePath),
+                UPLOAD_ERR_OK,
+                true
+            );
+        }
+
         return $file;
     }
 }
