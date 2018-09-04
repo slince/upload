@@ -26,72 +26,46 @@ Assume a file is uploaded with this HTML form:
 </form>
 ```
 
-- Basic usage
+#### Basic usage
 
 ```php
-use Slince\Upload\Uploader;
-use Slince\Upload\Exception\UploadException;
-use Slince\Upload\FileInfo;
+use Slince\Upload\UploadHandlerBuilder;
 
-$uploader = new Uploader('./savepath');
+$builder = new UploadHandlerBuilder(); //create a builder.
 
-try {
-    $fileInfo = $uploader->process($_FILES['foo']);
-    
-    if ($fileInfo->hasError()) {
-        echo $fileInfo->getErrorCode();
-        echo $fileInfo->getErrorMsg();
+$handler = $builder
+    ->saveTo(__DIR__ . '/dst')
+    ->getHandler();
+
+$files = $handler->handle();
+
+foreach ($files as $file) {
+    if ($file instanceof \Exception) {
+        echo 'upload error: ' . $file->getMessage(), PHP_EOL;
     } else {
-        echo $fileInfo->getPath(); //Gets the saved path of the uploaded file
+        echo 'upload ok, path:' . $file->getPathname();
     }
-} catch (UploadException $exception) {
-     exit($e->getMessage());
 }
-
 ```
 
-- Advanced usage
+### Advanced usage
 
 ```php
-//Override old files if there is a file of the same name  
-$uploader->setOverride(true);
 
-//Generate new file name using random mode
-$uploader->setRandName(true);
+$builder = new UploadHandlerBuilder();
+$handler = $builder
+    //Custom namer
+    ->naming(function (UploadedFile $file) {
+        return date('Y/md') . '/' . uniqid() . '.' . $file->getClientOriginalExtension();
+    })
 
-//Customize the file path
-$uploader->setFilenameGenerator(function(FileInfo $file) use ($uploader){
-    return $uploader->getSavePath() . uniqid() . ".{$file->getExtension()}";
-});
+    //add constraints
+    ->sizeBetween('10m', '20m')
+    ->allowExtensions(['jpg', 'txt'])
+    ->allowMimeTypes(['image/*', 'text/plain'])
 
-//Limit file size, Include boundary values;(unit: byte.) 
-//You can alse use human readable size express,e.g 5M (use "B", "K", M", or "G"))
-$uploader->addRule(new SizeRule(1000, 2000));
+    ->saveTo(__DIR__ . '/dst') //save to local
+    ->getHandler();
 
-
-//Limit the file mime type
-$uploader->addRule(new MimeTypeRule(['image/*', 'text/planin']));
-
-//Limit the extension
-$uploader->addRule(new ExtensionRule(['jpg', 'text']));
-```
-
-- Multi-file upload  
-
-```html
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" name="foo[]" value=""/>
-    <input type="file" name="foo[]" value=""/>
-    <input type="submit" value="Upload File"/>
-</form>
-```
-`$uploader->process($_FILES['foo'])` will return an array containing all the fileinfo
-
-```php
-try {
-    $fileInfos = $uploader->process($_FILES['foo']);
-    var_dump($fileInfos);
-} catch (UploadException $exception) {
-     exit($e->getMessage());
-}
+$files = $handler->handle();
 ```

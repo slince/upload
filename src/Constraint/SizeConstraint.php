@@ -47,10 +47,11 @@ class SizeConstraint implements ConstraintInterface
      */
     public function validate(UploadedFile $file)
     {
-        $size = $file->getSize();
-        $result = ($this->maxSize !== null || $size <= $this->maxSize)
-            && ($this->minSize !== null || $size >= $this->minSize);
-        return true;
+        $size = method_exists($file, 'getClientSize') ?
+            $file->getClientSize() : $file->getSize();
+
+        return ($this->maxSize === null || $size <= $this->maxSize)
+            && ($this->minSize === null || $size >= $this->minSize);
     }
 
     /**
