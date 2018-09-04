@@ -13,6 +13,7 @@ namespace Slince\Upload;
 
 use Slince\Upload\Filesystem\FilesystemInterface;
 use Slince\Upload\Naming\NamerInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -39,6 +40,11 @@ class UploadHandler
      */
     protected $overwrite;
 
+    /**
+     * @var FileBag
+     */
+    protected $uploadedFiles;
+
     public function __construct(
         FilesystemInterface $filesystem,
         NamerInterface $namer,
@@ -61,21 +67,47 @@ class UploadHandler
     }
 
     /**
+     * Gets all uploaded files.
+     *
+     * [
+     *     'file1' => UploadedFile,
+     *     'file2' => [
+     *         UploadedFile,
+     *         UploadedFile
+     *     ],
+     * ]
+     * @return UploadedFile[]
+     */
+    public function getUploadedFiles()
+    {
+        return $this->uploadedFiles->all();
+    }
+
+    /**
      * Process request
      * @param SymfonyRequest|null $request
      *
-     * @return UploadedFile[]|\Exception[]|UploadedFile
+     * @return File[]|\Exception[]|File
      */
     public function handle($request = null)
     {
-        $files = [];
-        foreach ($this->createFiles($request) as $uploadedFile) {
-            $files[] = $this->processFile($uploadedFile);
-        }
-        return count($files) === 1 ? $files[0] : $files;
+        return $this->processUploadedFiles($this->createUploadedFiles($request));
     }
 
-    protected function processFile(UploadedFile $file)
+    protected function processUploadedFiles($uploadedFiles)
+    {
+        $files = [];
+        foreach ($uploadedFiles as $name => $uploadedFileItem) {
+            if (is_array($uploadedFileItem)) {
+                $files[$name] = $this->processUploadedFiles($uploadedFileItem);
+            } else {
+                $files[$name] = $this->processUploadedFile($uploadedFileItem);
+            }
+        }
+        return $files;
+    }
+
+    protected function processUploadedFile(UploadedFile $file)
     {
         try {
             // validate the file
@@ -91,13 +123,13 @@ class UploadHandler
      * @param SymfonyRequest|null $request
      * @return FileBag
      */
-    protected function createFiles($request = null)
+    protected function createUploadedFiles($request = null)
     {
         if ($request instanceof SymfonyRequest) {
             $files = $request->files;
         } else {
             $files = new FileBag($_FILES);
         }
-        return $files;
+        return $this->uploadedFiles = $files;
     }
 }

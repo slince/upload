@@ -10,10 +10,19 @@ $handler = $builder
 
 $files = $handler->handle();
 
-foreach ($files as $file) {
+//Gets all 'UploadedFile' objects
+$uploadedFiles = $handler->getUploadedFiles();
+print_r($uploadedFiles);
+
+foreach ($files as $name => $file) {
+
+    //you can access some client attribute, like original name, extension, or mime type..
+    $uploadedFile = $uploadedFiles[$name];
+
     if ($file instanceof \Exception) {
-        echo 'upload error: ' . $file->getMessage(), PHP_EOL;
+        echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getMessage(), PHP_EOL;
     } else {
-        echo 'upload ok, path:' . $file->getPathname();
+        echo $uploadedFile->getClientOriginalName() . 'upload ok, path:' . $file->getPathname();
     }
 }
+exit('ok');

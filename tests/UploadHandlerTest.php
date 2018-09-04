@@ -20,9 +20,9 @@ class UploadHandlerTest extends TestCase
         $this->assertInstanceOf(Validator::class, $handler->getValidator());
 
         //test handle
-        $file = $handler->handle();
-        $this->assertInstanceOf(File::class, $file);
-        $this->assertContains('dst', $file->getPathname());
+        $files = $handler->handle();
+        $this->assertInstanceOf(File::class, $files[0]);
+        $this->assertContains('dst', $files[0]->getPathname());
     }
 
     protected function handleMulti()
@@ -45,12 +45,13 @@ class UploadHandlerTest extends TestCase
         $file = Utils::createFile('hello-test-overwrite', false);
         $handler = $this->mockHandler([$file]);
         $result = $handler->handle();
-        $this->assertInstanceOf(\RuntimeException::class, $result);
+
+        $this->assertInstanceOf(\RuntimeException::class, $result[0]);
 
         //start overwrite mode.
         $handler = $this->mockHandler([$file], true);
         $result = $handler->handle();
-        $this->assertInstanceOf(File::class, $result);
+        $this->assertInstanceOf(File::class, $result[0]);
     }
 
 
@@ -66,9 +67,9 @@ class UploadHandlerTest extends TestCase
         //mock handler
         $handler = $this->getMockBuilder(UploadHandler::class)
             ->setConstructorArgs([$filesystem, $namer, $overwrite])
-            ->setMethods(['createFiles'])
+            ->setMethods(['createUploadedFiles'])
             ->getMock();
-        $handler->method('createFiles')
+        $handler->method('createUploadedFiles')
             ->willReturn($files);
 
         return $handler;

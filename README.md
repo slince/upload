@@ -22,6 +22,8 @@ Assume a file is uploaded with this HTML form:
 ```html
 <form method="POST" enctype="multipart/form-data">
     <input type="file" name="foo" value=""/>
+    <input type="file" name="bar[]" value=""/>
+    <input type="file" name="bar[]" value=""/>
     <input type="submit" value="Upload File"/>
 </form>
 ```
@@ -48,12 +50,29 @@ foreach ($files as $file) {
 }
 ```
 
+if you want access some attributes of the file saved in the client, you can use like this.
+
+```php
+
+//Gets all 'UploadedFile' objects
+
+$uploadedFiles = $handler->getUploadedFiles();
+print_r($uploadedFiles);
+
+$uploadedFiles['foo']->getClientOriginalName(); // original name
+$uploadedFiles['bar'][0]->getClientOriginalExtension(); // original  extension
+$uploadedFiles['bar'][1]->getClientMimeType(); // original  mime type
+```
+
 ### Advanced usage
 
 ```php
 
 $builder = new UploadHandlerBuilder();
 $handler = $builder
+
+    ->overwrite(true) // open overwrite mode. 
+    
     //Custom namer
     ->naming(function (UploadedFile $file) {
         return date('Y/md') . '/' . uniqid() . '.' . $file->getClientOriginalExtension();
