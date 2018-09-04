@@ -13,20 +13,13 @@ namespace Slince\Upload\Tests\Constraint;
 
 use PHPUnit\Framework\TestCase;
 use Slince\Upload\Constraint\ExtensionConstraint;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Slince\Upload\Tests\Utils;
 
 class ExtensionConstraintTest extends TestCase
 {
     public function testValid()
     {
-        $filepath = __DIR__ . '/../Fixtures/hello.txt';
-        $file = new UploadedFile(
-            $filepath,
-            'hello2.txt',
-            'text/plain',
-            null,
-            true
-        );
+        $file = Utils::createFile('hello2.txt');
 
         $constraint = new ExtensionConstraint(['txt']);
         $this->assertTrue($constraint->validate($file));

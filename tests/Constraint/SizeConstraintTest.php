@@ -13,20 +13,15 @@ namespace Slince\Upload\Tests\Constraint;
 
 use PHPUnit\Framework\TestCase;
 use Slince\Upload\Constraint\SizeConstraint;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Slince\Upload\Tests\Utils;
 
 class SizeConstraintTest extends TestCase
 {
     public function testValid()
     {
         $filepath = __DIR__ . '/../Fixtures/hello.txt';
-        $file = new UploadedFile(
-            $filepath,
-            'hello2.txt',
-            'text/plain',
-            null,
-            true
-        );
+        $file = Utils::createFile('hello2.txt');
+
         $constraint = new SizeConstraint(filesize($filepath) - 100, 2000);
         $this->assertTrue($constraint->validate($file));
 

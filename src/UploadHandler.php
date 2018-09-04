@@ -64,7 +64,7 @@ class UploadHandler
      * Process request
      * @param SymfonyRequest|null $request
      *
-     * @return UploadedFile[]
+     * @return UploadedFile[]|\Exception[]|UploadedFile
      */
     public function handle($request = null)
     {
@@ -72,7 +72,7 @@ class UploadHandler
         foreach ($this->createFiles($request) as $uploadedFile) {
             $files[] = $this->processFile($uploadedFile);
         }
-        return $files;
+        return count($files) === 1 ? $files[0] : $files;
     }
 
     protected function processFile(UploadedFile $file)
