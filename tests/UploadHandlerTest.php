@@ -10,7 +10,7 @@ use Slince\Upload\Validator;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class UploaderHandlerTest extends TestCase
+class UploadHandlerTest extends TestCase
 {
     public function testHandle()
     {
