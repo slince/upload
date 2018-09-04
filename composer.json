@@ -1,7 +1,7 @@
 {
     "name": "slince/upload",
     "description": "Process file uploads with multiple and extensible validation rules",
-    "keywords": ["upload", "validation", "file", "file upload"],
+    "keywords": ["upload","http-foundation", "validation", "file", "file upload"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -12,17 +12,20 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.5.9"
+        "php": ">=5.6.0",
+        "symfony/http-foundation": "^3.4|^4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.0"
+        "phpunit/phpunit": "^5.0|^6.0"
     },
     "autoload": {
         "psr-4": {
-            "Slince\\Upload\\": ""
+            "Slince\\Upload\\": "./src"
         }
     },
-    "suggest": {
-        "ext-fileinfo": "More accurately detect the file mimetype"
+    "autoload-dev": {
+        "psr-4": {
+            "Slince\\Upload\\Tests\\": "./tests"
+        }
     }
 }
