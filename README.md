@@ -69,3 +69,7 @@ $handler = $builder
 
 $files = $handler->handle();
 ```
+
+## License
+ 
+The MIT license. See [MIT](https://opensource.org/licenses/MIT)

@@ -7,7 +7,7 @@
 
     <testsuites>
         <testsuite name="Slince Test Suite">
-            <directory>./Tests/</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 
@@ -15,11 +15,8 @@
         <whitelist>
             <directory>./</directory>
             <exclude>
-                <directory>./Tests</directory>
+                <directory>./tests</directory>
                 <directory>./vendor</directory>
-                <file>ErrorStore.php</file>
-                <file>RuleFactory.php</file>
-                <file>Registry.php</file>
             </exclude>
         </whitelist>
     </filter>
