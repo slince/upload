@@ -7,12 +7,12 @@
 
 Process uploaded files.
 
-### Install
+### Installation
 
 Install via composer
 
-```
-composer require slince/upload
+```bash
+$ composer require slince/upload
 ```
 
 ### Usage
