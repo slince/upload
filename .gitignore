@@ -6,3 +6,5 @@ vendor/
 composer.lock
 /docs/samples/dst/*
 !/docs/samples/dst/.gitkeep
+/tests/Fixtures/dst/*
+!/tests/Fixtures/dst/.gitkeep
