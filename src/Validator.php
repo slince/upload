@@ -22,7 +22,7 @@ final class Validator
      *
      * @var ConstraintInterface[]
      */
-    protected $constraints;
+    protected $constraints = [];
 
     /**
      * Add a constraint
@@ -43,7 +43,7 @@ final class Validator
     {
         foreach ($this->constraints as $constraint) {
             if (!$constraint->validate($file)) {
-                throw new ConstraintException($constraint);
+                throw new ConstraintException($constraint, $file);
             }
         }
     }

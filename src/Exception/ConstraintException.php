@@ -12,7 +12,7 @@
 namespace Slince\Upload\Exception;
 
 use Slince\Upload\Constraint\ConstraintInterface;
-use Throwable;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ConstraintException extends UploadException
 {
@@ -21,17 +21,35 @@ class ConstraintException extends UploadException
      */
     protected $constraint;
 
-    public function __construct(ConstraintInterface $constraint)
+    /**
+     * @var UploadedFile
+     */
+    protected $uploadedFile;
+
+    public function __construct(ConstraintInterface $constraint, UploadedFile $uploadedFile)
     {
         $this->constraint = $constraint;
-        parent::__construct($message, $code, $previous);
+        $this->uploadedFile = $uploadedFile;
+        parent::__construct($constraint->getErrorMessage($uploadedFile));
     }
 
     /**
+     * Gets the constraint
+     *
      * @return ConstraintInterface
      */
     public function getConstraint()
     {
         return $this->constraint;
+    }
+
+    /**
+     * Gets the uploaded file
+     *
+     * @return UploadedFile
+     */
+    public function getUploadedFile()
+    {
+        return $this->file;
     }
 }

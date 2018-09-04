@@ -20,7 +20,7 @@ use Slince\Upload\Filesystem\FilesystemInterface;
 use Slince\Upload\Filesystem\Local;
 use Slince\Upload\Naming\GenericNamer;
 use Slince\Upload\Naming\NamerInterface;
-use Slince\Upload\src\Naming\ClosureNamer;
+use Slince\Upload\Naming\ClosureNamer;
 
 final class UploadHandlerBuilder
 {

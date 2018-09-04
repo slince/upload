@@ -32,7 +32,7 @@ class MimeTypeConstraint implements ConstraintInterface
     public function validate(UploadedFile $file)
     {
         foreach ($this->allowedMimeTypes as $mimeType) {
-            if ($mimeType == $file->getMimeType()
+            if ($mimeType === $file->getClientMimeType()
                 || (strpos($mimeType, '/*') !== false
                     && explode('/', $mimeType)[0] == explode('/', $file->getMimeType())[0])
             ) {
@@ -40,5 +40,13 @@ class MimeTypeConstraint implements ConstraintInterface
             }
         }
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getErrorMessage(UploadedFile $file)
+    {
+        return sprintf('File type "%s" is invalid', $file->getClientMimeType());
     }
 }

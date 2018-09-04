@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Slince\Upload\src\Naming;
+namespace Slince\Upload\Naming;
 
-use Slince\Upload\Naming\NamerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ClosureNamer implements NamerInterface

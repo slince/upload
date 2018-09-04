@@ -23,7 +23,7 @@ class ExtensionConstraint implements ConstraintInterface
 
     public function __construct(array $allowedExtensions)
     {
-        $this->allowedExtensions[] = $allowedExtensions;
+        $this->allowedExtensions = $allowedExtensions;
     }
 
     /**
@@ -31,9 +31,14 @@ class ExtensionConstraint implements ConstraintInterface
      */
     public function validate(UploadedFile $file)
     {
-        if (!in_array($file->getExtension(), $this->allowedExtensions)) {
-            return false;
-        }
-        return true;
+        return in_array($file->getClientOriginalExtension(), $this->allowedExtensions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getErrorMessage(UploadedFile $file)
+    {
+        return sprintf('File extension "%s" is invalid', $file->getClientOriginalExtension());
     }
 }

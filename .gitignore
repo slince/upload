@@ -4,3 +4,5 @@
 .idea/
 vendor/
 composer.lock
+/docs/samples/dst/*
+!/docs/samples/dst/.gitkeep

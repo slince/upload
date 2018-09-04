@@ -24,4 +24,12 @@ interface ConstraintInterface
      * @return boolean
      */
     public function validate(UploadedFile $file);
+
+    /**
+     * Gets error message.
+     *
+     * @param UploadedFile $file
+     * @return string
+     */
+    public function getErrorMessage(UploadedFile $file);
 }

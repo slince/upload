@@ -37,7 +37,8 @@ class Local implements FilesystemInterface
         if (file_exists($filePath) && !$overwrite) {
             throw new \RuntimeException(sprintf('The file with key "%s" is exists.', $key));
         }
-        return $file->move($this->savePath, $key);
+
+        return $file->move(dirname($filePath), basename($filePath));
     }
 
     protected function getFilePath($key)

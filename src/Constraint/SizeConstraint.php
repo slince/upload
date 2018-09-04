@@ -53,6 +53,21 @@ class SizeConstraint implements ConstraintInterface
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getErrorMessage(UploadedFile $file)
+    {
+        $message = null;
+        if ($this->minSize && $this->maxSize) {
+            $message = sprintf('File size should between %s and %s', $this->minSize, $this->maxSize);
+        } elseif ($this->minSize === null) {
+            $message = sprintf('File size should less than %s', $this->maxSize);
+        } elseif ($this->maxSize === null) {
+            $message = sprintf('File size should greater than %s', $this->minSize);
+        }
+        return $message;
+    }
 
     /**
      * Convert human readable file size (e.g. "10K" or "3M") into bytes
