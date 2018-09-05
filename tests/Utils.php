@@ -8,6 +8,8 @@ final class Utils
 {
     const DST_DIR = __DIR__ . '/Fixtures/dst';
 
+    const FLY_DIR = __DIR__ . '/Fixtures/flysystem';
+
     public static function createFile($name, $removeOld = true)
     {
         $filepath = __DIR__ . '/Fixtures/hello.txt';

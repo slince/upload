@@ -8,3 +8,5 @@ composer.lock
 !/docs/samples/dst/.gitkeep
 /tests/Fixtures/dst/*
 !/tests/Fixtures/dst/.gitkeep
+/tests/Fixtures/flysystem/*
+!/tests/Fixtures/flysystem/.gitkeep

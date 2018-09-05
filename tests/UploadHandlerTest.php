@@ -3,11 +3,11 @@
 namespace Slince\Upload\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Slince\Upload\File;
 use Slince\Upload\Filesystem\Local;
 use Slince\Upload\Naming\GenericNamer;
 use Slince\Upload\UploadHandler;
 use Slince\Upload\Validator;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadHandlerTest extends TestCase
@@ -22,7 +22,7 @@ class UploadHandlerTest extends TestCase
         //test handle
         $files = $handler->handle();
         $this->assertInstanceOf(File::class, $files[0]);
-        $this->assertContains('dst', $files[0]->getPathname());
+        $this->assertContains('dst', $files[0]->getDetails()->getPathname());
     }
 
     protected function handleMulti()
@@ -46,7 +46,7 @@ class UploadHandlerTest extends TestCase
         $handler = $this->mockHandler([$file]);
         $result = $handler->handle();
 
-        $this->assertInstanceOf(\RuntimeException::class, $result[0]);
+        $this->assertInstanceOf(\RuntimeException::class, $result[0]->getException());
 
         //start overwrite mode.
         $handler = $this->mockHandler([$file], true);

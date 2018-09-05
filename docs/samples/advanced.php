@@ -15,9 +15,9 @@ $handler = $builder
     })
 
     //add constraints
-    ->sizeBetween('10m', '20m')
-    ->allowExtensions(['jpg', 'txt'])
-    ->allowMimeTypes(['image/*', 'text/plain'])
+    ->sizeBetween('10m', '20m') //filter file size
+    ->allowExtensions(['jpg', 'txt']) //filter ext
+    ->allowMimeTypes(['image/*', 'text/plain']) //filter mime type
 
     // save to local
     ->saveTo(__DIR__ . '/dst')
@@ -29,15 +29,14 @@ $files = $handler->handle();
 $uploadedFiles = $handler->getUploadedFiles();
 print_r($uploadedFiles);
 
-foreach ($files as $name => $file) {
-
-    //You can access some client attribute of the file.
-    $uploadedFile = $uploadedFiles[$name];
-
-    if ($file instanceof \Exception) {
-        echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getMessage(), PHP_EOL;
+foreach ($files as $file) {
+    $uploadedFile = $file->getUploadedFile();
+    if ($file->isUploaded()) {
+        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getDetails()->getPathname();
     } else {
-        echo $uploadedFile->getClientOriginalName() . 'upload ok, path:' . $file->getPathname();
+        echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getException()->getMessage();
     }
+    echo PHP_EOL;
 }
+
 exit('ok');

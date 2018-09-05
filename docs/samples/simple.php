@@ -14,15 +14,14 @@ $files = $handler->handle();
 $uploadedFiles = $handler->getUploadedFiles();
 print_r($uploadedFiles);
 
-foreach ($files as $name => $file) {
-
-    //you can access some client attribute, like original name, extension, or mime type..
-    $uploadedFile = $uploadedFiles[$name];
-
-    if ($file instanceof \Exception) {
-        echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getMessage(), PHP_EOL;
+foreach ($files as $file) {
+    //you can access some client attribute, like original name, extension, or mime type.
+    $uploadedFile = $file->getUploadedFile();
+    if ($file->isUploaded()) {
+        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getDetails()->getPathname();
     } else {
-        echo $uploadedFile->getClientOriginalName() . 'upload ok, path:' . $file->getPathname();
+        echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getException()->getMessage();
     }
+    echo PHP_EOL;
 }
 exit('ok');

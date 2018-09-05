@@ -13,7 +13,6 @@ namespace Slince\Upload;
 
 use Slince\Upload\Filesystem\FilesystemInterface;
 use Slince\Upload\Naming\NamerInterface;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -87,7 +86,7 @@ class UploadHandler
      * Process request
      * @param SymfonyRequest|null $request
      *
-     * @return File[]|\Exception[]|File
+     * @return File[]
      */
     public function handle($request = null)
     {
@@ -107,16 +106,20 @@ class UploadHandler
         return $files;
     }
 
-    protected function processUploadedFile(UploadedFile $file)
+    protected function processUploadedFile(UploadedFile $uploadedFile)
     {
+        $name = $this->namer->generate($uploadedFile);
         try {
             // validate the file
-            $this->validator->validate($file);
-            return $this->filesystem
-                ->upload($this->namer->generate($file), $file, $this->overwrite);
+            $this->validator->validate($uploadedFile);
+            $data = $this->filesystem
+                ->upload($name, $uploadedFile, $this->overwrite);
+
+            $file = new File($uploadedFile, $name, true, $data);
         } catch (\Exception $exception) {
-            return $exception;
+            $file = new File($uploadedFile, $name, false, null, $exception);
         }
+        return $file;
     }
 
     /**
