@@ -103,8 +103,10 @@ $builder = new UploadHandlerBuilder();
 $handler = $builder->setFilesystem(createS3Flysystem())
     ->getHandler();
 
-$handler->handle();
+$files = $handler->handle();
+print_r($files);
 ```
+All files will be automatically uploaded to AWS S3.
 
 ## License
  
