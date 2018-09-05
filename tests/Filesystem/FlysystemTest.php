@@ -12,6 +12,9 @@ class FlysystemTest extends TestCase
 {
     public function testUpload()
     {
+        if (!class_exists('League\Flysystem\Filesystem')) {
+            $this->markTestSkipped();
+        }
         $file = Utils::createFile('hello-3.txt');
 
         $localAdapter = new Local(Utils::FLY_DIR);
