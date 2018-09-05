@@ -39,28 +39,8 @@ $handler = $builder
     ->getHandler();
 
 $files = $handler->handle();
-
-foreach ($files as $file) {
-    $uploadedFile = $file->getUploadedFile();
-    if ($file->isUploaded()) {
-        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getDetails()->getPathname();
-    } else {
-        echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getException()->getMessage();
-    }
-    echo PHP_EOL;
-}
+print_r($files);
 ```
-
-File details (`$file->getDetails()`) is provided by storage layer. if you are using `Local`, it is an instance of `SplFileInfo`. 
-
-If you want access attributes of the file saved in the client, you can use like this.
-
-```php
-$files['foo']->getUploadedFile()->getClientOriginalName(); // original name
-$files['bar']['baz'][0]->getUploadedFile()->getClientOriginalExtension(); // original  extension
-$files['bar']['baz'][1]->getUploadedFile()->getClientMimeType(); // original  mime type
-```
-
 ### Advanced usage
 
 ```php
@@ -82,6 +62,25 @@ $handler = $builder
     ->getHandler();
 
 $files = $handler->handle();
+
+foreach ($files as $file) {
+    $uploadedFile = $file->getUploadedFile();
+    if ($file->isUploaded()) {
+        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getDetails()->getPathname();
+    } else {
+        echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getException()->getMessage();
+    }
+    echo PHP_EOL;
+}
+```
+File details (`$file->getDetails()`) is provided by storage layer. if you are using `Local`, it is an instance of `SplFileInfo`. 
+
+If you want access attributes of the file saved in the client, you can use like this.
+
+```php
+$files['foo']->getUploadedFile()->getClientOriginalName(); // original name
+$files['bar']['baz'][0]->getUploadedFile()->getClientOriginalExtension(); // original  extension
+$files['bar']['baz'][1]->getUploadedFile()->getClientMimeType(); // original  mime type
 ```
 
 ### Integration with [flysystem](https://github.com/thephpleague/flysystem)
