@@ -7,7 +7,7 @@
 
 Process uploaded files with multiple and extensible validation rules.
 
-### Installation
+## Installation
 
 Install via composer
 
@@ -15,9 +15,21 @@ Install via composer
 $ composer require slince/upload
 ```
 
-### Usage
+## Quick view
 
-Assume a file is uploaded with this HTML form:
+```php
+$builder = new Slince\Upload\UploadHandlerBuilder(); //create a builder.
+$handler = $builder
+    ->saveTo(__DIR__ . '/dst')
+    ->getHandler();
+
+$files = $handler->handle();
+print_r($files);
+```
+
+## Usage
+
+Assume files are uploaded with this HTML form:
 
 ```html
 <form method="POST" enctype="multipart/form-data">
@@ -28,21 +40,7 @@ Assume a file is uploaded with this HTML form:
 </form>
 ```
 
-#### Basic usage
-
-```php
-use Slince\Upload\UploadHandlerBuilder;
-
-$builder = new UploadHandlerBuilder(); //create a builder.
-$handler = $builder
-    ->saveTo(__DIR__ . '/dst')
-    ->getHandler();
-
-$files = $handler->handle();
-print_r($files);
-```
-### Advanced usage
-
+Server:
 ```php
 $builder = new UploadHandlerBuilder();
 $handler = $builder
@@ -73,10 +71,10 @@ foreach ($files as $file) {
     echo PHP_EOL;
 }
 ```
-File details (`$file->getDetails()`) is provided by storage layer. if you are using `Local`, it is an instance of `SplFileInfo`. 
+File details `$file->getDetails()` is provided by storage layer. 
+if you are using `Local`, it is an instance of `SplFileInfo`. 
 
 If you want access attributes of the file saved in the client, you can use like this.
-
 ```php
 $files['foo']->getUploadedFile()->getClientOriginalName(); // original name
 $files['bar']['baz'][0]->getUploadedFile()->getClientOriginalExtension(); // original  extension
