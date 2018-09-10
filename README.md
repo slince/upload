@@ -42,7 +42,7 @@ Assume files are uploaded with this HTML form:
 
 Server:
 ```php
-$builder = new UploadHandlerBuilder();
+$builder = new Slince\Upload\UploadHandlerBuilder(); //create a builder.
 $handler = $builder
     ->overwrite(true) // open overwrite mode. 
     
@@ -99,8 +99,8 @@ function createS3Flysystem()
     return $flysystem;
 }
 
-$builder = new UploadHandlerBuilder();
-$handler = $builder->setFilesystem(createS3Flysystem())
+$builder = new Slince\Upload\UploadHandlerBuilder(); //create a builder.
+$handler = $builder->setFilesystem(new Slince\Upload\Filesystem\Flysystem(createS3Flysystem()))
     ->getHandler();
 
 $files = $handler->handle();
