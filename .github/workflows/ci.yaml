@@ -50,10 +50,6 @@ jobs:
         run: |
           composer update --no-interaction --prefer-dist --no-progress ${{ matrix.composer-flags }}
 
-      - name: Check
-        run: |
-          ls
-
       - name: Run tests
         run: |
           vendor/bin/phpunit
