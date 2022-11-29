@@ -16,6 +16,6 @@ class TempTest extends TestCase
         $file = Utils::createFile('hello2.txt');
         $temp = new Temp();
         $file = $temp->upload('hello-3.txt', $file);
-        $this->assertContains(sys_get_temp_dir(), $file->getPathname());
+        $this->assertStringContainsStringIgnoringCase(sys_get_temp_dir(), $file->getPathname());
     }
 }

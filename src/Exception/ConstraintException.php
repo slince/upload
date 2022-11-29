@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the slince/upload package.
- *
- * (c) Slince <taosikai@yeah.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Slince\Upload\Exception;
 
 use Slince\Upload\Constraint\ConstraintInterface;
@@ -38,7 +29,7 @@ class ConstraintException extends UploadException
      *
      * @return ConstraintInterface
      */
-    public function getConstraint()
+    public function getConstraint(): ConstraintInterface
     {
         return $this->constraint;
     }
@@ -48,7 +39,7 @@ class ConstraintException extends UploadException
      *
      * @return UploadedFile
      */
-    public function getUploadedFile()
+    public function getUploadedFile(): UploadedFile
     {
         return $this->file;
     }

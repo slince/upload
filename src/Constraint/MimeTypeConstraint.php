@@ -1,21 +1,16 @@
 <?php
 
-/*
- * This file is part of the slince/upload package.
- *
- * (c) Slince <taosikai@yeah.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Slince\Upload\Constraint;
 
-use Slince\Upload\Exception\ConstraintException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MimeTypeConstraint implements ConstraintInterface
 {
+    /**
+     * @var string
+     */
+    protected $errorMessageTemplate = 'File type {type} is invalid';
+
     /**
      * @var array
      */
@@ -29,7 +24,7 @@ class MimeTypeConstraint implements ConstraintInterface
     /**
      * {@inheritdoc]
      */
-    public function validate(UploadedFile $file)
+    public function validate(UploadedFile $file): bool
     {
         foreach ($this->allowedMimeTypes as $mimeType) {
             if ($mimeType === $file->getClientMimeType()
@@ -45,8 +40,16 @@ class MimeTypeConstraint implements ConstraintInterface
     /**
      * {@inheritdoc}
      */
-    public function getErrorMessage(UploadedFile $file)
+    public function getErrorMessage(UploadedFile $file): string
     {
-        return sprintf('File type "%s" is invalid', $file->getClientMimeType());
+        return str_replace('{type}', $file->getClientMimeType(), $this->errorMessageTemplate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setErrorMessage(string $messageTemplate): void
+    {
+        $this->errorMessageTemplate = $messageTemplate;
     }
 }

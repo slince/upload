@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the slince/upload package.
- *
- * (c) Slince <taosikai@yeah.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Slince\Upload;
 
 use Slince\Upload\Constraint\ConstraintInterface;
@@ -28,7 +19,7 @@ final class Validator
      * Add a constraint
      * @param ConstraintInterface $constraint
      */
-    public function addConstraint(ConstraintInterface $constraint)
+    public function addConstraint(ConstraintInterface $constraint): void
     {
         $this->constraints[] = $constraint;
     }
@@ -40,7 +31,7 @@ final class Validator
      * @return true
      * @throws ConstraintException
      */
-    public function validate(UploadedFile $file)
+    public function validate(UploadedFile $file): bool
     {
         foreach ($this->constraints as $constraint) {
             if (!$constraint->validate($file)) {

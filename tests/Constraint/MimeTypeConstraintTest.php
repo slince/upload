@@ -14,7 +14,7 @@ class MimeTypeConstraintTest extends TestCase
 
         $constraint = new MimeTypeConstraint(['text/plain']);
         $this->assertTrue($constraint->validate($file));
-        $this->assertContains('File type', $constraint->getErrorMessage($file));
+        $this->assertStringContainsStringIgnoringCase('File type', $constraint->getErrorMessage($file));
 
         $constraint = new MimeTypeConstraint(['image/jpeg']);
         $this->assertFalse($constraint->validate($file));

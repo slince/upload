@@ -22,7 +22,7 @@ class UploadHandlerTest extends TestCase
         //test handle
         $files = $handler->handle();
         $this->assertInstanceOf(File::class, $files[0]);
-        $this->assertContains('dst', $files[0]->getDetails()->getPathname());
+        $this->assertStringContainsStringIgnoringCase('dst', $files[0]->getDetails()->getPathname());
     }
 
     protected function handleMulti()

@@ -1,20 +1,16 @@
 <?php
 
-/*
- * This file is part of the slince/upload package.
- *
- * (c) Slince <taosikai@yeah.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Slince\Upload\Constraint;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ExtensionConstraint implements ConstraintInterface
 {
+    /**
+     * @var string
+     */
+    protected $errorMessageTemplate = 'File extension {extension} is invalid';
+
     /**
      * allowed extensions
      * @var array
@@ -29,7 +25,7 @@ class ExtensionConstraint implements ConstraintInterface
     /**
      * {@inheritdoc}
      */
-    public function validate(UploadedFile $file)
+    public function validate(UploadedFile $file): bool
     {
         return in_array($file->getClientOriginalExtension(), $this->allowedExtensions);
     }
@@ -37,8 +33,16 @@ class ExtensionConstraint implements ConstraintInterface
     /**
      * {@inheritdoc}
      */
-    public function getErrorMessage(UploadedFile $file)
+    public function getErrorMessage(UploadedFile $file): string
     {
-        return sprintf('File extension "%s" is invalid', $file->getClientOriginalExtension());
+        return str_replace('{extension}', $file->getClientOriginalExtension(), $this->errorMessageTemplate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setErrorMessage(string $messageTemplate): void
+    {
+        $this->errorMessageTemplate = $messageTemplate;
     }
 }
