@@ -84,7 +84,11 @@ class UploadHandler
         return $this->processUploadedFiles($this->createUploadedFiles($request));
     }
 
-    protected function processUploadedFiles(array $uploadedFiles): array
+    /**
+     * @param FileBag|array $uploadedFiles
+     * @return array
+     */
+    protected function processUploadedFiles($uploadedFiles): array
     {
         $files = [];
         foreach ($uploadedFiles as $name => $uploadedFileItem) {
