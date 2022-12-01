@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the slince/upload package.
- *
- * (c) Slince <taosikai@yeah.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Slince\Upload;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -45,7 +36,7 @@ final class File
     protected $details;
 
     public function __construct(
-        UploadedFile $uploadedFile, $name, $uploaded, $details = null, $exception = null)
+        UploadedFile $uploadedFile, string $name, bool $uploaded, $details = null, $exception = null)
     {
         $this->uploadedFile = $uploadedFile;
         $this->name = $name;
@@ -59,7 +50,7 @@ final class File
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -69,7 +60,7 @@ final class File
      *
      * @return UploadedFile
      */
-    public function getUploadedFile()
+    public function getUploadedFile(): UploadedFile
     {
         return $this->uploadedFile;
     }
@@ -79,7 +70,7 @@ final class File
      *
      * @return bool
      */
-    public function isUploaded()
+    public function isUploaded(): bool
     {
         return $this->uploaded;
     }
@@ -89,7 +80,7 @@ final class File
      *
      * @return \Exception
      */
-    public function getException()
+    public function getException(): ?\Exception
     {
         return $this->exception;
     }

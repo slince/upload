@@ -23,7 +23,7 @@ class ExtensionConstraintTest extends TestCase
 
         $constraint = new ExtensionConstraint(['txt']);
         $this->assertTrue($constraint->validate($file));
-        $this->assertContains('File extension', $constraint->getErrorMessage($file));
+        $this->assertStringContainsStringIgnoringCase('File extension', $constraint->getErrorMessage($file));
 
         $constraint = new ExtensionConstraint(['jpg']);
         $this->assertFalse($constraint->validate($file));

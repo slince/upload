@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the slince/upload package.
- *
- * (c) Slince <taosikai@yeah.net>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Slince\Upload;
 
 use Slince\Upload\Filesystem\FilesystemInterface;
@@ -47,7 +38,7 @@ class UploadHandler
     public function __construct(
         FilesystemInterface $filesystem,
         NamerInterface $namer,
-        $overwrite = false
+        bool $overwrite = false
     ) {
         $this->filesystem = $filesystem;
         $this->namer = $namer;
@@ -60,7 +51,7 @@ class UploadHandler
      *
      * @return Validator
      */
-    public function getValidator()
+    public function getValidator(): Validator
     {
         return $this->validator;
     }
@@ -77,7 +68,7 @@ class UploadHandler
      * ]
      * @return UploadedFile[]
      */
-    public function getUploadedFiles()
+    public function getUploadedFiles(): array
     {
         return $this->uploadedFiles->all();
     }
@@ -88,12 +79,12 @@ class UploadHandler
      *
      * @return File[]
      */
-    public function handle($request = null)
+    public function handle(?SymfonyRequest $request = null): array
     {
         return $this->processUploadedFiles($this->createUploadedFiles($request));
     }
 
-    protected function processUploadedFiles($uploadedFiles)
+    protected function processUploadedFiles(array $uploadedFiles): array
     {
         $files = [];
         foreach ($uploadedFiles as $name => $uploadedFileItem) {
@@ -106,7 +97,7 @@ class UploadHandler
         return $files;
     }
 
-    protected function processUploadedFile(UploadedFile $uploadedFile)
+    protected function processUploadedFile(UploadedFile $uploadedFile): File
     {
         $name = $this->namer->generate($uploadedFile);
         try {
@@ -126,7 +117,7 @@ class UploadHandler
      * @param SymfonyRequest|null $request
      * @return FileBag
      */
-    protected function createUploadedFiles($request = null)
+    protected function createUploadedFiles(?SymfonyRequest $request = null)
     {
         if ($request instanceof SymfonyRequest) {
             $files = $request->files;

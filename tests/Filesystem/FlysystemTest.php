@@ -2,8 +2,8 @@
 
 namespace Slince\Upload\Tests\Filesystem;
 
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 use Slince\Upload\Filesystem\Flysystem;
 use Slince\Upload\Tests\Utils;
@@ -17,7 +17,7 @@ class FlysystemTest extends TestCase
         }
         $file = Utils::createFile('hello-3.txt');
 
-        $localAdapter = new Local(Utils::FLY_DIR);
+        $localAdapter = new LocalFilesystemAdapter(Utils::FLY_DIR);
         $flysystem = new Flysystem(new Filesystem($localAdapter));
 
         $result = $flysystem->upload('hello-4.txt', $file, true);

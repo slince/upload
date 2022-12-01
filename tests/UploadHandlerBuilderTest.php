@@ -18,9 +18,6 @@ class UploadHandlerBuilderTest extends TestCase
 
         $handler = $builder->saveTo(Utils::DST_DIR)->getHandler();
         $this->assertInstanceOf(UploadHandler::class, $handler);
-
-        $this->assertAttributeInstanceOf(GenericNamer::class, 'namer', $handler);
-        $this->assertAttributeInstanceOf(Local::class, 'filesystem', $handler);
     }
 
     public function testAdvanceBuild()
@@ -40,8 +37,7 @@ class UploadHandlerBuilderTest extends TestCase
             ->saveTo(Utils::DST_DIR)
             ->getHandler();
 
-        $this->assertAttributeInstanceOf(ClosureNamer::class, 'namer', $handler);
-        $this->assertAttributeInstanceOf(Local::class, 'filesystem', $handler);
+        $this->assertInstanceOf(UploadHandler::class, $handler);
     }
 
     public function testErrorBuild()
