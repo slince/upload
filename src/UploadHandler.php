@@ -26,6 +26,11 @@ class UploadHandler
     protected $validator;
 
     /**
+     * @var FileProcessor
+     */
+    protected $processor;
+
+    /**
      * @var boolean
      */
     protected $overwrite;
@@ -44,6 +49,7 @@ class UploadHandler
         $this->namer = $namer;
         $this->overwrite = $overwrite;
         $this->validator = new Validator();
+        $this->processor = new FileProcessor();
     }
 
     /**
@@ -54,6 +60,11 @@ class UploadHandler
     public function getValidator(): Validator
     {
         return $this->validator;
+    }
+
+    public function getProcessor(): FileProcessor
+    {
+        return $this->processor;
     }
 
     /**
@@ -110,6 +121,9 @@ class UploadHandler
         } catch (\Exception $exception) {
             $file = new File($uploadedFile, $name, false, null, $exception);
         }
+
+        $this->processor->process($file);
+
         return $file;
     }
 
