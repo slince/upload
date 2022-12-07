@@ -68,7 +68,7 @@ class UploadHandlerTest extends TestCase
         //mock handler
         $handler = $this->getMockBuilder(UploadHandler::class)
             ->setConstructorArgs([$filesystem, $namer, null, null, $overwrite])
-            ->onlyMethods(['createUploadedFiles'])
+            ->setMethods(['createUploadedFiles'])
             ->getMock();
         $handler->method('createUploadedFiles')
             ->willReturn($files);
