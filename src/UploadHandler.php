@@ -51,9 +51,9 @@ class UploadHandler
     ) {
         $this->filesystem = $filesystem;
         $this->namer = $namer;
-        $this->overwrite = $overwrite;
         $this->validator = $validator ?: new Validator();
         $this->processor = $processor ?: new ChainProcessor();
+        $this->overwrite = $overwrite;
     }
 
     /**
