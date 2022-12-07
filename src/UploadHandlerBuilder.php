@@ -68,7 +68,7 @@ class UploadHandlerBuilder
         }
 
         $constraint = new MimeTypeConstraint($mimeTypes);
-        if ($errorMessageTemplate) {
+        if (null !== $errorMessageTemplate) {
             $constraint->setErrorMessage($errorMessageTemplate);
         }
 
@@ -189,11 +189,11 @@ class UploadHandlerBuilder
      */
     public function getHandler(): UploadHandler
     {
-        if ($this->namer === null) {
+        if (null === $this->namer) {
             $this->namer = new GenericNamer();
         }
 
-        if ($this->filesystem === null) {
+        if (null === $this->filesystem) {
             throw new \LogicException('You should set a filesystem for the builder.');
         }
 
