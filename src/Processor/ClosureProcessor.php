@@ -1,10 +1,10 @@
 <?php
 
-namespace Slince\Upload\Processing;
+namespace Slince\Upload\Processor;
 
 use Slince\Upload\File;
 
-class Processor implements ProcessorInterface
+class ClosureProcessor implements ProcessorInterface
 {
     protected $closure;
 
@@ -18,8 +18,6 @@ class Processor implements ProcessorInterface
      */
     public function process(File $file): File
     {
-        call_user_func($this->closure, $file);
-
-        return $file;
+        return call_user_func($this->closure, $file);
     }
 }

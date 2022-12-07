@@ -11,7 +11,9 @@ use Slince\Upload\Filesystem\Local;
 use Slince\Upload\Naming\GenericNamer;
 use Slince\Upload\Naming\NamerInterface;
 use Slince\Upload\Naming\ClosureNamer;
-use Slince\Upload\Processing\ProcessorInterface;
+use Slince\Upload\Processor\ChainProcessor;
+use Slince\Upload\Processor\ClosureProcessor;
+use Slince\Upload\Processor\ProcessorInterface;
 
 class UploadHandlerBuilder
 {
@@ -38,7 +40,7 @@ class UploadHandlerBuilder
     /**
      * @var ProcessorInterface[]
      */
-    protected $processList = [];
+    protected $processors = [];
 
     /**
      * Sets overwrite mode.
@@ -85,7 +87,7 @@ class UploadHandlerBuilder
     public function sizeBetween($from, $to, ?string $errorMessageTemplate = null): self
     {
         $constraint = new SizeConstraint($from, $to);
-        if ($errorMessageTemplate) {
+        if (null !== $errorMessageTemplate) {
             $constraint->setErrorMessage($errorMessageTemplate);
         }
 
@@ -107,7 +109,7 @@ class UploadHandlerBuilder
         }
 
         $constraint = new ExtensionConstraint($extensions);
-        if ($errorMessageTemplate) {
+        if (null !== $errorMessageTemplate) {
             $constraint->setErrorMessage($errorMessageTemplate);
         }
 
@@ -148,7 +150,7 @@ class UploadHandlerBuilder
      * @param string $path
      * @return $this
      */
-    public function saveTo($path): self
+    public function saveTo(string $path): self
     {
         return $this->setFilesystem(new Local($path));
     }
@@ -166,14 +168,17 @@ class UploadHandlerBuilder
     }
 
     /**
-     * Add to process list
+     * Add to processor list
      *
-     * @param \Closure|ProcessorInterface $process
+     * @param \Closure|ProcessorInterface $processor
      * @return $this
      */
-    public function addProcess($process): self
+    public function addProcessor($processor): self
     {
-        $this->processList[] = $process;
+        if ($processor instanceof \Closure) {
+            $processor = new ClosureProcessor($processor);
+        }
+        $this->processors[] = $processor;
         return $this;
     }
 
@@ -189,21 +194,13 @@ class UploadHandlerBuilder
         }
 
         if ($this->filesystem === null) {
-            throw new \LogicException(sprintf('You should set a filesystem for the builder.'));
+            throw new \LogicException('You should set a filesystem for the builder.');
         }
 
-        $handler = new UploadHandler($this->filesystem, $this->namer, $this->overwrite);
-
-        $validator = $handler->getValidator();
-        foreach ($this->constraints as $constraint) {
-            $validator->addConstraint($constraint);
-        }
-
-        $processor = $handler->getProcessor();
-        foreach ($this->processList as $process) {
-            $processor->addProcess($process);
-        }
-
-        return $handler;
+        return new UploadHandler($this->filesystem, $this->namer,
+            new Validator($this->constraints),
+            new ChainProcessor($this->processors),
+            $this->overwrite
+        );
     }
 }

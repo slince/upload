@@ -4,6 +4,8 @@ namespace Slince\Upload;
 
 use Slince\Upload\Filesystem\FilesystemInterface;
 use Slince\Upload\Naming\NamerInterface;
+use Slince\Upload\Processor\ChainProcessor;
+use Slince\Upload\Processor\ProcessorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -26,7 +28,7 @@ class UploadHandler
     protected $validator;
 
     /**
-     * @var FileProcessor
+     * @var ProcessorInterface
      */
     protected $processor;
 
@@ -43,28 +45,25 @@ class UploadHandler
     public function __construct(
         FilesystemInterface $filesystem,
         NamerInterface $namer,
+        Validator $validator = null,
+        ProcessorInterface $processor = null,
         bool $overwrite = false
     ) {
         $this->filesystem = $filesystem;
         $this->namer = $namer;
         $this->overwrite = $overwrite;
-        $this->validator = new Validator();
-        $this->processor = new FileProcessor();
+        $this->validator = $validator ?: new Validator();
+        $this->processor = $processor ?: new ChainProcessor();
     }
 
     /**
-     * Gets the validator
+     * Gets the validator.
      *
      * @return Validator
      */
     public function getValidator(): Validator
     {
         return $this->validator;
-    }
-
-    public function getProcessor(): FileProcessor
-    {
-        return $this->processor;
     }
 
     /**
@@ -126,16 +125,14 @@ class UploadHandler
             $file = new File($uploadedFile, $name, false, null, $exception);
         }
 
-        $this->processor->process($file);
-
-        return $file;
+        return $this->processor->process($file);
     }
 
     /**
      * @param SymfonyRequest|null $request
      * @return FileBag
      */
-    protected function createUploadedFiles(?SymfonyRequest $request = null)
+    protected function createUploadedFiles(?SymfonyRequest $request = null): FileBag
     {
         if ($request instanceof SymfonyRequest) {
             $files = $request->files;

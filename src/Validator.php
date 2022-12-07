@@ -15,6 +15,11 @@ final class Validator
      */
     protected $constraints = [];
 
+    public function __construct(array $constraints = [])
+    {
+        $this->constraints = $constraints;
+    }
+
     /**
      * Add a constraint
      * @param ConstraintInterface $constraint
