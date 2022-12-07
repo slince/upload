@@ -11,6 +11,7 @@ use Slince\Upload\Filesystem\Local;
 use Slince\Upload\Naming\GenericNamer;
 use Slince\Upload\Naming\NamerInterface;
 use Slince\Upload\Naming\ClosureNamer;
+use Slince\Upload\Processing\ProcessorInterface;
 
 class UploadHandlerBuilder
 {
@@ -33,6 +34,11 @@ class UploadHandlerBuilder
      * @var ConstraintInterface[]
      */
     protected $constraints = [];
+
+    /**
+     * @var ProcessorInterface[]
+     */
+    protected $processList = [];
 
     /**
      * Sets overwrite mode.
@@ -160,6 +166,18 @@ class UploadHandlerBuilder
     }
 
     /**
+     * Add to process list
+     *
+     * @param \Closure|ProcessorInterface $process
+     * @return $this
+     */
+    public function addProcess($process): self
+    {
+        $this->processList[] = $process;
+        return $this;
+    }
+
+    /**
      * Make upload handler
      *
      * @return UploadHandler
@@ -169,14 +187,23 @@ class UploadHandlerBuilder
         if ($this->namer === null) {
             $this->namer = new GenericNamer();
         }
+
         if ($this->filesystem === null) {
             throw new \LogicException(sprintf('You should set a filesystem for the builder.'));
         }
+
         $handler = new UploadHandler($this->filesystem, $this->namer, $this->overwrite);
+
         $validator = $handler->getValidator();
         foreach ($this->constraints as $constraint) {
             $validator->addConstraint($constraint);
         }
+
+        $processor = $handler->getProcessor();
+        foreach ($this->processList as $process) {
+            $processor->addProcess($process);
+        }
+
         return $handler;
     }
 }
