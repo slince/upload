@@ -9,13 +9,14 @@ use Slince\Upload\Naming\GenericNamer;
 use Slince\Upload\UploadHandler;
 use Slince\Upload\Validator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\FileBag;
 
 class UploadHandlerTest extends TestCase
 {
     public function testHandle()
     {
         $file = Utils::createFile('hello-test-handle');
-        $handler = $this->mockHandler([$file]);
+        $handler = $this->mockHandler(new FileBag([$file]));
         // test validator
         $this->assertInstanceOf(Validator::class, $handler->getValidator());
 
@@ -30,7 +31,7 @@ class UploadHandlerTest extends TestCase
         $file = Utils::createFile('hello-test-handle-multi');
         $file2 = Utils::createFile('hello-test-handle-multi2');
 
-        $handler = $this->mockHandler([$file, $file2]);
+        $handler = $this->mockHandler(new FileBag([$file, $file2]));
         $files = $handler->handle();
         $this->assertCount(2, $files);
     }
@@ -38,36 +39,36 @@ class UploadHandlerTest extends TestCase
     public function testOverwrite()
     {
         $file = Utils::createFile('hello-test-overwrite');
-        $handler = $this->mockHandler([$file]);
+        $handler = $this->mockHandler(new FileBag([$file]));
         $handler->handle();
 
         //upload again
         $file = Utils::createFile('hello-test-overwrite', false);
-        $handler = $this->mockHandler([$file]);
+        $handler = $this->mockHandler(new FileBag([$file]));
         $result = $handler->handle();
 
         $this->assertInstanceOf(\RuntimeException::class, $result[0]->getException());
 
         //start overwrite mode.
-        $handler = $this->mockHandler([$file], true);
+        $handler = $this->mockHandler(new FileBag([$file]), true);
         $result = $handler->handle();
         $this->assertInstanceOf(File::class, $result[0]);
     }
 
 
     /**
-     * @param UploadedFile[] $files
+     * @param FileBag $files
      * @param boolean $overwrite
      * @return UploadHandler
      */
-    protected function mockHandler($files, $overwrite = false)
+    protected function mockHandler(FileBag $files, bool $overwrite = false)
     {
         $filesystem = new Local(__DIR__ . '/Fixtures/dst');
         $namer = new GenericNamer();
         //mock handler
         $handler = $this->getMockBuilder(UploadHandler::class)
-            ->setConstructorArgs([$filesystem, $namer, $overwrite])
-            ->setMethods(['createUploadedFiles'])
+            ->setConstructorArgs([$filesystem, $namer, null, null, $overwrite])
+            ->onlyMethods(['createUploadedFiles'])
             ->getMock();
         $handler->method('createUploadedFiles')
             ->willReturn($files);

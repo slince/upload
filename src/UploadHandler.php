@@ -101,11 +101,11 @@ class UploadHandler
     protected function processUploadedFiles($uploadedFiles): array
     {
         $files = [];
-        foreach ($uploadedFiles as $name => $uploadedFileItem) {
-            if (is_array($uploadedFileItem)) {
-                $files[$name] = $this->processUploadedFiles($uploadedFileItem);
+        foreach ($uploadedFiles as $name => $uploadedFile) {
+            if (is_array($uploadedFile)) {
+                $files[$name] = $this->processUploadedFiles($uploadedFile);
             } else {
-                $files[$name] = $this->processUploadedFile($uploadedFileItem);
+                $files[$name] = $this->processUploadedFile($uploadedFile);
             }
         }
         return $files;

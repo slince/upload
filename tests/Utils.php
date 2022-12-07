@@ -10,7 +10,7 @@ final class Utils
 
     const FLY_DIR = __DIR__ . '/Fixtures/flysystem';
 
-    public static function createFile($name, $removeOld = true)
+    public static function createFile($name, $removeOld = true): UploadedFile
     {
         $filepath = __DIR__ . '/Fixtures/hello.txt';
         $copyFilePath = __DIR__ . '/Fixtures/hello-tmp.txt';
