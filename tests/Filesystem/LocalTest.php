@@ -17,10 +17,4 @@ class LocalTest extends TestCase
 
         $this->assertFileExists(Utils::DST_DIR . '/hello2.txt');
     }
-
-    public function testException()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        new Local(__DIR__ . '/../Fixtures/not-exist/');
-    }
 }
