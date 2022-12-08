@@ -14,9 +14,14 @@ class Local implements FilesystemInterface
 
     public function __construct(string $savePath)
     {
-        if (!is_dir($savePath)) {
+        if (!$this->ensureDirectory($savePath)) {
+            throw new \InvalidArgumentException(sprintf('Directory "%s" was not created', $savePath));
+        }
+
+        if (!is_writable($savePath)) {
             throw new \InvalidArgumentException(sprintf('The directory "%s" is invalid', $savePath));
         }
+
         $this->savePath = rtrim($savePath, '\\/');
     }
 
@@ -35,5 +40,10 @@ class Local implements FilesystemInterface
     protected function getFilePath(string $key): string
     {
         return "{$this->savePath}/{$key}";
+    }
+
+    protected function ensureDirectory(string $directory): bool
+    {
+        return is_dir($directory) || mkdir($directory, 0755, true);
     }
 }
