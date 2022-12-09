@@ -37,6 +37,16 @@ class Flysystem implements FilesystemInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function delete(string $key): bool
+    {
+        $this->filesystem->delete($key);
+
+        return true;
+    }
+
+    /**
      * @param string $key
      * @param UploadedFile $file
      * @throws RuntimeException

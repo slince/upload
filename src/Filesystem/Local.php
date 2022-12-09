@@ -37,6 +37,20 @@ class Local implements FilesystemInterface
         return $file->move(dirname($filePath), basename($filePath));
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(string $key): bool
+    {
+        $filePath = $this->getFilePath($key);
+
+        if (file_exists($filePath)) {
+            return unlink($filePath);
+        }
+
+        return true;
+    }
+
     protected function getFilePath(string $key): string
     {
         return "{$this->savePath}/{$key}";

@@ -95,6 +95,27 @@ class UploadHandler
     }
 
     /**
+     * Clear files
+     *
+     * @return bool
+     */
+    public function clear(): bool
+    {
+        $files = $this->getUploadedFiles();
+        foreach ($files as $key => $file) {
+            if (is_array($file)) {
+                foreach ($file as $f) {
+                    $this->filesystem->delete($key, $f);
+                }
+            } else {
+                $this->filesystem->delete($key, $file);
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param FileBag|array $uploadedFiles
      * @return array
      */

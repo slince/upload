@@ -15,4 +15,12 @@ interface FilesystemInterface
      * @return mixed
      */
     public function upload(string $key, UploadedFile $file, bool $overwrite);
+
+    /**
+     * Delete file
+     *
+     * @param string $key
+     * @return bool
+     */
+    public function delete(string $key): bool;
 }
