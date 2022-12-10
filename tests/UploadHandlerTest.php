@@ -36,7 +36,11 @@ class UploadHandlerTest extends TestCase
 
         $handler->clear($files);
 
-        $this->assertFileDoesNotExist($filePath);
+        if (method_exists($this, 'assertFileDoesNotExist')) {
+            $this->assertFileDoesNotExist($filePath);
+        } else {
+            $this->assertFileNotExists($filePath);
+        }
     }
 
     protected function handleMulti()
