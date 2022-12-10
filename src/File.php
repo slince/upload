@@ -2,6 +2,7 @@
 
 namespace Slince\Upload;
 
+use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class File
@@ -24,7 +25,7 @@ final class File
     protected $uploaded;
 
     /**
-     * @var \Exception
+     * @var Exception
      */
     protected $exception;
 
@@ -78,9 +79,9 @@ final class File
     /**
      * The exception if the file is uploaded error.
      *
-     * @return \Exception
+     * @return Exception
      */
-    public function getException(): ?\Exception
+    public function getException(): ?Exception
     {
         return $this->exception;
     }

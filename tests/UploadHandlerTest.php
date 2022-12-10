@@ -8,7 +8,6 @@ use Slince\Upload\Filesystem\Local;
 use Slince\Upload\Naming\GenericNamer;
 use Slince\Upload\UploadHandler;
 use Slince\Upload\Validator;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
 class UploadHandlerTest extends TestCase

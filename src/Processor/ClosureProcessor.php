@@ -2,13 +2,14 @@
 
 namespace Slince\Upload\Processor;
 
+use Closure;
 use Slince\Upload\File;
 
 class ClosureProcessor implements ProcessorInterface
 {
     protected $closure;
 
-    public function __construct(\Closure $closure)
+    public function __construct(Closure $closure)
     {
         $this->closure = $closure;
     }

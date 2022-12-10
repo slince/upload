@@ -2,13 +2,14 @@
 
 namespace Slince\Upload\Naming;
 
+use Closure;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ClosureNamer implements NamerInterface
 {
     protected $closure;
 
-    public function __construct(\Closure $closure)
+    public function __construct(Closure $closure)
     {
         $this->closure = $closure;
     }

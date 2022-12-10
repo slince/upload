@@ -2,6 +2,7 @@
 
 namespace Slince\Upload;
 
+use Exception;
 use Slince\Upload\Filesystem\FilesystemInterface;
 use Slince\Upload\Naming\NamerInterface;
 use Slince\Upload\Processor\ChainProcessor;
@@ -121,7 +122,7 @@ class UploadHandler
                 ->upload($name, $uploadedFile, $this->overwrite);
 
             $file = new File($uploadedFile, $name, true, $data);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $file = new File($uploadedFile, $name, false, null, $exception);
         }
 
