@@ -15,14 +15,6 @@ class Local implements FilesystemInterface
 
     public function __construct(string $savePath)
     {
-        if (!$this->ensureDirectory($savePath)) {
-            throw new InvalidArgumentException(sprintf('Directory "%s" was not created', $savePath));
-        }
-
-        if (!is_writable($savePath)) {
-            throw new InvalidArgumentException(sprintf('The directory "%s" is invalid', $savePath));
-        }
-
         $this->savePath = rtrim($savePath, '\\/');
     }
 
@@ -31,10 +23,19 @@ class Local implements FilesystemInterface
      */
     public function upload(string $key, UploadedFile $file, bool $overwrite = false)
     {
+        if (!$this->ensureDirectory($this->savePath)) {
+            throw new \InvalidArgumentException(sprintf('Directory "%s" was not created', $this->savePath));
+        }
+
+        if (!is_writable($this->savePath)) {
+            throw new \InvalidArgumentException(sprintf('The directory "%s" is invalid', $this->savePath));
+        }
+
         $filePath = $this->getFilePath($key);
         if (!$overwrite && file_exists($filePath)) {
             throw new RuntimeException(sprintf('The file with key "%s" is exists.', $key));
         }
+
         return $file->move(dirname($filePath), basename($filePath));
     }
 
