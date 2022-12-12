@@ -102,7 +102,9 @@ class UploadHandler
     {
         $files = [];
         foreach ($uploadedFiles as $name => $uploadedFile) {
-            if (is_array($uploadedFile)) {
+            if (!$uploadedFile) {
+                continue;
+            } elseif (is_array($uploadedFile)) {
                 $files[$name] = $this->processUploadedFiles($uploadedFile);
             } else {
                 $files[$name] = $this->processUploadedFile($uploadedFile);
