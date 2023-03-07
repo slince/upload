@@ -2,6 +2,8 @@
 
 namespace Slince\Upload\Exception;
 
-class UploadException extends \Exception
+use Exception;
+
+class UploadException extends Exception
 {
 }

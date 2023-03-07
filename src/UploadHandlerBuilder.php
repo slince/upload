@@ -2,6 +2,8 @@
 
 namespace Slince\Upload;
 
+use Closure;
+use LogicException;
 use Slince\Upload\Constraint\ConstraintInterface;
 use Slince\Upload\Constraint\ExtensionConstraint;
 use Slince\Upload\Constraint\MimeTypeConstraint;
@@ -120,12 +122,12 @@ class UploadHandlerBuilder
     /**
      * Sets namer.
      *
-     * @param \Closure|NamerInterface $namer
+     * @param Closure|NamerInterface $namer
      * @return $this
      */
     public function naming($namer): self
     {
-        if ($namer instanceof \Closure) {
+        if ($namer instanceof Closure) {
             $namer = new ClosureNamer($namer);
         }
         $this->namer = $namer;
@@ -170,12 +172,12 @@ class UploadHandlerBuilder
     /**
      * Add to processor list
      *
-     * @param \Closure|ProcessorInterface $processor
+     * @param Closure|ProcessorInterface $processor
      * @return $this
      */
     public function addProcessor($processor): self
     {
-        if ($processor instanceof \Closure) {
+        if ($processor instanceof Closure) {
             $processor = new ClosureProcessor($processor);
         }
         $this->processors[] = $processor;
@@ -194,7 +196,7 @@ class UploadHandlerBuilder
         }
 
         if (null === $this->filesystem) {
-            throw new \LogicException('You should set a filesystem for the builder.');
+            throw new LogicException('You should set a filesystem for the builder.');
         }
 
         return new UploadHandler($this->filesystem, $this->namer,
