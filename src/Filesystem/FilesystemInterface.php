@@ -2,7 +2,6 @@
 
 namespace Slince\Upload\Filesystem;
 
-use Slince\Upload\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface FilesystemInterface
@@ -16,12 +15,4 @@ interface FilesystemInterface
      * @return mixed
      */
     public function upload(string $key, UploadedFile $file, bool $overwrite);
-
-    /**
-     * Delete file
-     *
-     * @param File $file
-     * @return bool
-     */
-    public function delete(File $file): bool;
 }

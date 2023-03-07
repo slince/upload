@@ -4,7 +4,6 @@ namespace Slince\Upload\Filesystem;
 
 use League\Flysystem\Filesystem;
 use \RuntimeException;
-use Slince\Upload\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Flysystem implements FilesystemInterface
@@ -34,16 +33,6 @@ class Flysystem implements FilesystemInterface
             $this->uploadToFlysystem($key, $file);
         }
         @unlink($file->getPathname()); //remove old
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function delete(File $file): bool
-    {
-        $this->filesystem->delete($file->getName());
-
         return true;
     }
 
