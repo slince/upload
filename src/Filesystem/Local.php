@@ -2,8 +2,7 @@
 
 namespace Slince\Upload\Filesystem;
 
-use \RuntimeException;
-use Slince\Upload\File;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Local implements FilesystemInterface
@@ -32,7 +31,7 @@ class Local implements FilesystemInterface
         }
 
         $filePath = $this->getFilePath($key);
-        if (file_exists($filePath) && !$overwrite) {
+        if (!$overwrite && file_exists($filePath)) {
             throw new RuntimeException(sprintf('The file with key "%s" is exists.', $key));
         }
 
@@ -60,11 +59,11 @@ class Local implements FilesystemInterface
 
     protected function getFilePath(string $key): string
     {
-        return "{$this->savePath}/{$key}";
+        return $this->savePath . DIRECTORY_SEPARATOR . $key;
     }
 
     protected function ensureDirectory(string $directory): bool
     {
-        return is_dir($directory) || mkdir($directory, 0755, true);
+        return is_dir($directory) || mkdir($directory, 0755, true) || is_dir($directory);
     }
 }

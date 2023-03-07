@@ -3,7 +3,8 @@
 namespace Slince\Upload\Filesystem;
 
 use League\Flysystem\Filesystem;
-use \RuntimeException;
+use League\Flysystem\FilesystemException;
+use RuntimeException;
 use Slince\Upload\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -28,12 +29,13 @@ class Flysystem implements FilesystemInterface
             $this->uploadToFlysystem($key, $file);
         } catch (RuntimeException $exception) {
             if (!$overwrite) {
-                throw new \RuntimeException(sprintf('The file with key "%s" is exists.', $key));
+                throw new RuntimeException(sprintf('The file with key "%s" is exists.', $key));
             }
             $this->filesystem->delete($key);
             $this->uploadToFlysystem($key, $file);
         }
         @unlink($file->getPathname()); //remove old
+
         return true;
     }
 
@@ -54,7 +56,9 @@ class Flysystem implements FilesystemInterface
      */
     protected function uploadToFlysystem(string $key, UploadedFile $file): void
     {
-        if (!$this->filesystem->writeStream($key, fopen($file->getPathname(), 'r'))) {
+        try {
+            $this->filesystem->writeStream($key, fopen($file->getPathname(), 'r'));
+        } catch (FilesystemException $exception) {
             throw new RuntimeException('Failed to upload to flysystem');
         }
     }

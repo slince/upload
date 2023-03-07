@@ -27,7 +27,7 @@ class ExtensionConstraint implements ConstraintInterface
      */
     public function validate(UploadedFile $file): bool
     {
-        return in_array(strtolower($file->getClientOriginalExtension()), $this->allowedExtensions);
+        return in_array(strtolower($file->getClientOriginalExtension()), $this->allowedExtensions, true);
     }
 
     /**
