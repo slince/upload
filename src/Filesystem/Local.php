@@ -3,6 +3,7 @@
 namespace Slince\Upload\Filesystem;
 
 use RuntimeException;
+use Slince\Upload\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Local implements FilesystemInterface
