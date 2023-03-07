@@ -3,6 +3,7 @@
 namespace Slince\Upload\Filesystem;
 
 use \RuntimeException;
+use Slince\Upload\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Local implements FilesystemInterface
@@ -36,6 +37,25 @@ class Local implements FilesystemInterface
         }
 
         return $file->move(dirname($filePath), basename($filePath));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete(File $file): bool
+    {
+        $details = $file->getDetails();
+
+        $filePath = '';
+        if ($details) {
+            $filePath = $details->getPathname();
+        }
+
+        if (file_exists($filePath)) {
+            return unlink($filePath);
+        }
+
+        return true;
     }
 
     protected function getFilePath(string $key): string

@@ -26,6 +26,23 @@ class UploadHandlerTest extends TestCase
         $this->assertStringContainsStringIgnoringCase('dst', $files[0]->getDetails()->getPathname());
     }
 
+    public function testClear()
+    {
+        $file = Utils::createFile('hello-test-handle');
+        $handler = $this->mockHandler(new FileBag([$file]));
+
+        $files = $handler->handle();
+        $filePath = $files[0]->getDetails()->getPathname();
+
+        $handler->clear($files);
+
+        if (method_exists($this, 'assertFileDoesNotExist')) {
+            $this->assertFileDoesNotExist($filePath);
+        } else {
+            $this->assertFileNotExists($filePath);
+        }
+    }
+
     protected function handleMulti()
     {
         $file = Utils::createFile('hello-test-handle-multi');
