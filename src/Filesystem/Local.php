@@ -35,7 +35,8 @@ class Local implements FilesystemInterface
             throw new RuntimeException(sprintf('The file with key "%s" is exists.', $file->getName()));
         }
 
-        $file->getUploadedFile()->move(dirname($filePath), basename($filePath));
+        $splFile = $file->getUploadedFile()->move(dirname($filePath), basename($filePath));
+        $file->setMetadata('spl_file', $splFile);
     }
 
     /**

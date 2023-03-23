@@ -125,6 +125,7 @@ final class UploadHandler
             $this->validator->validate($uploadedFile);
             $this->filesystem
                 ->upload($file, $this->overwrite);
+
             $file->setUploaded(true);
         } catch (Exception $exception) {
             $file->setUploaded(false);

@@ -73,6 +73,40 @@ final class File
     }
 
     /**
+     * Set a metadata for the file.
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function setMetadata(string $name, mixed $value): void
+    {
+        $this->metadata[$name] = $value;
+    }
+
+    /**
+     * Returns the metadata with the given name.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function getMetadata(string $name): mixed
+    {
+        return $this->metadata[$name] ?? null;
+    }
+
+    /**
+     * Checks whether the given metadata is exists.
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function hasMetadata(string $name): bool
+    {
+        return isset($this->metadata[$name]);
+    }
+
+    /**
      * Checks whether the file is uploaded successfully.
      *
      * @return bool
