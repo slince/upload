@@ -11,37 +11,32 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
-class UploadHandler
+final class UploadHandler
 {
     /**
      * @var NamerInterface
      */
-    protected $namer;
+    protected NamerInterface $namer;
 
     /**
      * @var FilesystemInterface
      */
-    protected $filesystem;
+    protected FilesystemInterface $filesystem;
 
     /**
      * @var Validator
      */
-    protected $validator;
+    protected Validator $validator;
 
     /**
      * @var ProcessorInterface
      */
-    protected $processor;
+    protected ProcessorInterface $processor;
 
     /**
      * @var boolean
      */
-    protected $overwrite;
-
-    /**
-     * @var FileBag
-     */
-    protected $uploadedFiles;
+    protected bool $overwrite;
 
     public function __construct(
         FilesystemInterface $filesystem,
@@ -68,72 +63,59 @@ class UploadHandler
     }
 
     /**
-     * Gets all uploaded files.
-     *
-     * [
-     *     'file1' => UploadedFile,
-     *     'file2' => [
-     *         UploadedFile,
-     *         UploadedFile
-     *     ],
-     * ]
-     * @return UploadedFile[]
-     */
-    public function getUploadedFiles(): array
-    {
-        return $this->uploadedFiles->all();
-    }
-
-    /**
      * Process request
      * @param SymfonyRequest|null $request
      *
-     * @return File[]
+     * @return FileSet
      */
-    public function handle(?SymfonyRequest $request = null): array
+    public function handle(?SymfonyRequest $request = null): FileSet
     {
-        return $this->processUploadedFiles($this->createUploadedFiles($request));
+        $uploadedFiles = $this->createUploadedFiles($request);
+        $files =  $this->handleUploadedFiles($uploadedFiles);
+        return new FileSet($files, $uploadedFiles);
     }
 
     /**
-     * Clear files
+     * Clear files from filesystem.
      *
-     * @param File[] $files
+     * @param FileSet $files
      * @return bool
      */
-    public function clear(array $files): bool
+    public function clear(FileSet $files): bool
     {
         foreach ($files as $file) {
             if (is_array($file)) {
-                $this->clear($file);
+                $this->clear(new FileSet($file));
             } else {
                 $this->filesystem->delete($file);
             }
         }
-
         return true;
     }
 
     /**
-     * @param FileBag|array $uploadedFiles
+     * Handle uploaded files.
+     *
+     * @param FileBag $uploadedFiles
      * @return array
      */
-    protected function processUploadedFiles($uploadedFiles): array
+    protected function handleUploadedFiles(FileBag $uploadedFiles): array
     {
         $files = [];
         foreach ($uploadedFiles as $name => $uploadedFile) {
             if (!$uploadedFile) {
                 continue;
-            } elseif (is_array($uploadedFile)) {
-                $files[$name] = $this->processUploadedFiles($uploadedFile);
+            }
+            if (is_array($uploadedFile)) {
+                $files[$name] = $this->handleUploadedFiles(new FileBag($uploadedFile));
             } else {
-                $files[$name] = $this->processUploadedFile($uploadedFile);
+                $files[$name] = $this->handleUploadedFile($uploadedFile);
             }
         }
         return $files;
     }
 
-    protected function processUploadedFile(UploadedFile $uploadedFile): File
+    protected function handleUploadedFile(UploadedFile $uploadedFile): File
     {
         $name = $this->namer->generate($uploadedFile);
         try {
@@ -161,6 +143,6 @@ class UploadHandler
         } else {
             $files = new FileBag($_FILES);
         }
-        return $this->uploadedFiles = $files;
+        return $files;
     }
 }

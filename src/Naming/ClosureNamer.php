@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ClosureNamer implements NamerInterface
 {
-    protected $closure;
+    protected Closure $closure;
 
     public function __construct(Closure $closure)
     {

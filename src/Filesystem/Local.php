@@ -11,7 +11,7 @@ class Local implements FilesystemInterface
     /**
      * @var string
      */
-    protected $savePath;
+    protected string $savePath;
 
     public function __construct(string $savePath)
     {
@@ -21,7 +21,7 @@ class Local implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function upload(string $key, UploadedFile $file, bool $overwrite = false)
+    public function upload(string $key, UploadedFile $file, bool $overwrite = false): void
     {
         if (!$this->ensureDirectory($this->savePath)) {
             throw new \InvalidArgumentException(sprintf('Directory "%s" was not created', $this->savePath));
@@ -36,7 +36,7 @@ class Local implements FilesystemInterface
             throw new RuntimeException(sprintf('The file with key "%s" is exists.', $key));
         }
 
-        return $file->move(dirname($filePath), basename($filePath));
+        $file->move(dirname($filePath), basename($filePath));
     }
 
     /**

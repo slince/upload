@@ -9,12 +9,12 @@ class MimeTypeConstraint implements ConstraintInterface
     /**
      * @var string
      */
-    protected $errorMessageTemplate = 'File type {type} is invalid';
+    protected string $errorMessageTemplate = 'File type {type} is invalid';
 
     /**
      * @var array
      */
-    protected $allowedMimeTypes;
+    protected array $allowedMimeTypes;
 
     public function __construct(array $allowedMimeTypes)
     {
@@ -28,7 +28,7 @@ class MimeTypeConstraint implements ConstraintInterface
     {
         foreach ($this->allowedMimeTypes as $mimeType) {
             if ($mimeType === $file->getClientMimeType()
-                || (strpos($mimeType, '/*') !== false
+                || (str_contains($mimeType, '/*')
                     && explode('/', $mimeType)[0] === explode('/', $file->getMimeType())[0])
             ) {
                 return true;

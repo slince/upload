@@ -9,26 +9,26 @@ class SizeConstraint implements ConstraintInterface
     /**
      * @var string
      */
-    protected $errorMessageTemplate = 'File size should between {minSize} and {maxSize}';
+    protected string $errorMessageTemplate = 'File size should between {minSize} and {maxSize}';
 
     /**
      * Maximum file size
-     * @var int
+     * @var int|null
      */
-    protected $maxSize;
+    protected ?int $maxSize;
 
     /**
      * Minimum file size
-     * @var int
+     * @var int|null
      */
-    protected $minSize;
+    protected ?int $minSize;
 
     /**
      * Limit file size (use "B", "K", M", or "G")
      * @param int|string|null $minSize
      * @param int|string|null $maxSize
      */
-    public function __construct($minSize = null, $maxSize = null)
+    public function __construct(int|string $minSize = null, int|string $maxSize = null)
     {
         if ($minSize !== null) {
             $this->minSize = static::humanReadableToBytes($minSize);

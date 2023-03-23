@@ -13,9 +13,9 @@ interface FilesystemInterface
      * @param string $key
      * @param UploadedFile $file
      * @param boolean $overwrite
-     * @return mixed
+     * @return void
      */
-    public function upload(string $key, UploadedFile $file, bool $overwrite);
+    public function upload(string $key, UploadedFile $file, bool $overwrite): void;
 
     /**
      * Delete file

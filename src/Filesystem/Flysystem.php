@@ -13,7 +13,7 @@ class Flysystem implements FilesystemInterface
     /**
      * @var Filesystem
      */
-    protected $filesystem;
+    protected Filesystem $filesystem;
 
     public function __construct(Filesystem $filesystem)
     {
@@ -23,7 +23,7 @@ class Flysystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function upload(string $key, UploadedFile $file, bool $overwrite = false)
+    public function upload(string $key, UploadedFile $file, bool $overwrite = false): void
     {
         try {
             $this->uploadToFlysystem($key, $file);
@@ -35,8 +35,6 @@ class Flysystem implements FilesystemInterface
             $this->uploadToFlysystem($key, $file);
         }
         @unlink($file->getPathname()); //remove old
-
-        return true;
     }
 
     /**

@@ -9,7 +9,7 @@ final class ChainProcessor implements ProcessorInterface
     /**
      * @var ProcessorInterface[]
      */
-    protected $processors = [];
+    protected array $processors = [];
 
     public function __construct(array $processors = [])
     {

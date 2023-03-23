@@ -7,7 +7,7 @@ use Slince\Upload\File;
 
 class ClosureProcessor implements ProcessorInterface
 {
-    protected $closure;
+    protected Closure $closure;
 
     public function __construct(Closure $closure)
     {

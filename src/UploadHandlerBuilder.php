@@ -10,9 +10,9 @@ use Slince\Upload\Constraint\MimeTypeConstraint;
 use Slince\Upload\Constraint\SizeConstraint;
 use Slince\Upload\Filesystem\FilesystemInterface;
 use Slince\Upload\Filesystem\Local;
+use Slince\Upload\Naming\ClosureNamer;
 use Slince\Upload\Naming\GenericNamer;
 use Slince\Upload\Naming\NamerInterface;
-use Slince\Upload\Naming\ClosureNamer;
 use Slince\Upload\Processor\ChainProcessor;
 use Slince\Upload\Processor\ClosureProcessor;
 use Slince\Upload\Processor\ProcessorInterface;
@@ -22,27 +22,27 @@ class UploadHandlerBuilder
     /**
      * @var boolean
      */
-    protected $overwrite = false;
+    protected bool $overwrite = false;
 
     /**
-     * @var NamerInterface
+     * @var NamerInterface|null
      */
-    protected $namer;
+    protected ?NamerInterface $namer = null;
 
     /**
-     * @var FilesystemInterface
+     * @var FilesystemInterface|null
      */
-    protected $filesystem;
+    protected ?FilesystemInterface $filesystem = null;
 
     /**
      * @var ConstraintInterface[]
      */
-    protected $constraints = [];
+    protected array $constraints = [];
 
     /**
      * @var ProcessorInterface[]
      */
-    protected $processors = [];
+    protected array $processors = [];
 
     /**
      * Sets overwrite mode.
@@ -63,7 +63,7 @@ class UploadHandlerBuilder
      * @param string|null $errorMessageTemplate
      * @return $this
      */
-    public function allowMimeTypes($mimeTypes, ?string $errorMessageTemplate = null): self
+    public function allowMimeTypes(array|string $mimeTypes, ?string $errorMessageTemplate = null): self
     {
         if (!is_array($mimeTypes)) {
             $mimeTypes = [$mimeTypes];
@@ -81,12 +81,12 @@ class UploadHandlerBuilder
     /**
      * Set size range
      *
-     * @param string|int|null $from
-     * @param string|int|null $to
+     * @param int|string|null $from
+     * @param int|string|null $to
      * @param string|null $errorMessageTemplate
      * @return $this
      */
-    public function sizeBetween($from, $to, ?string $errorMessageTemplate = null): self
+    public function sizeBetween(int|string|null $from, int|string|null $to, ?string $errorMessageTemplate = null): self
     {
         $constraint = new SizeConstraint($from, $to);
         if (null !== $errorMessageTemplate) {
@@ -104,7 +104,7 @@ class UploadHandlerBuilder
      * @param string|null $errorMessageTemplate
      * @return $this
      */
-    public function allowExtensions($extensions, ?string $errorMessageTemplate = null): self
+    public function allowExtensions(array|string $extensions, ?string $errorMessageTemplate = null): self
     {
         if (!is_array($extensions)) {
             $extensions = [$extensions];
@@ -125,7 +125,7 @@ class UploadHandlerBuilder
      * @param Closure|NamerInterface $namer
      * @return $this
      */
-    public function naming($namer): self
+    public function naming(NamerInterface|Closure $namer): self
     {
         if ($namer instanceof Closure) {
             $namer = new ClosureNamer($namer);
@@ -175,7 +175,7 @@ class UploadHandlerBuilder
      * @param Closure|ProcessorInterface $processor
      * @return $this
      */
-    public function addProcessor($processor): self
+    public function addProcessor(ProcessorInterface|Closure $processor): self
     {
         if ($processor instanceof Closure) {
             $processor = new ClosureProcessor($processor);

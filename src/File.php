@@ -2,42 +2,41 @@
 
 namespace Slince\Upload;
 
-use Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Throwable;
 
 final class File
 {
     /**
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * @var UploadedFile
      */
-    protected $uploadedFile;
+    protected UploadedFile $uploadedFile;
 
     /**
      * Is uploaded
      *
      * @var boolean
      */
-    protected $uploaded;
+    protected bool $uploaded;
 
     /**
-     * @var Exception
+     * @var Throwable
      */
-    protected $exception;
+    protected Throwable $exception;
 
     /**
      * Storage system returned.
      *
      * @var \Symfony\Component\HttpFoundation\File\File|mixed
      */
-    protected $details;
+    protected mixed $details;
 
-    public function __construct(
-        UploadedFile $uploadedFile, string $name, bool $uploaded, $details = null, $exception = null)
+    public function __construct(UploadedFile $uploadedFile, string $name, bool $uploaded, mixed $details = null, Throwable $exception = null)
     {
         $this->uploadedFile = $uploadedFile;
         $this->name = $name;
@@ -79,9 +78,9 @@ final class File
     /**
      * The exception if the file is uploaded error.
      *
-     * @return Exception
+     * @return Throwable|null
      */
-    public function getException(): ?Exception
+    public function getException(): ?Throwable
     {
         return $this->exception;
     }
@@ -91,7 +90,7 @@ final class File
      *
      * @return \Symfony\Component\HttpFoundation\File\File|mixed
      */
-    public function getDetails()
+    public function getDetails(): mixed
     {
         return $this->details;
     }

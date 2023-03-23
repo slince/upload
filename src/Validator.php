@@ -13,7 +13,7 @@ final class Validator
      *
      * @var ConstraintInterface[]
      */
-    protected $constraints = [];
+    protected array $constraints = [];
 
     public function __construct(array $constraints = [])
     {

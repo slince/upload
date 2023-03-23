@@ -26,7 +26,7 @@ $handler = $builder
 $files = $handler->handle();
 
 //Gets all 'UploadedFile' objects
-$uploadedFiles = $handler->getUploadedFiles();
+$uploadedFiles = $files->getUploadedFiles();
 print_r($uploadedFiles);
 
 foreach ($files as $file) {

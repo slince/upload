@@ -10,12 +10,12 @@ class ConstraintException extends UploadException
     /**
      * @var ConstraintInterface
      */
-    protected $constraint;
+    protected ConstraintInterface $constraint;
 
     /**
      * @var UploadedFile
      */
-    protected $uploadedFile;
+    protected UploadedFile $uploadedFile;
 
     public function __construct(ConstraintInterface $constraint, UploadedFile $uploadedFile)
     {

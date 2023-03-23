@@ -9,13 +9,13 @@ class ExtensionConstraint implements ConstraintInterface
     /**
      * @var string
      */
-    protected $errorMessageTemplate = 'File extension {extension} is invalid';
+    protected string $errorMessageTemplate = 'File extension {extension} is invalid';
 
     /**
      * allowed extensions
      * @var array
      */
-    protected $allowedExtensions = [];
+    protected array $allowedExtensions = [];
 
     public function __construct(array $allowedExtensions)
     {
