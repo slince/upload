@@ -118,15 +118,17 @@ final class UploadHandler
     protected function handleUploadedFile(UploadedFile $uploadedFile): File
     {
         $name = $this->namer->generate($uploadedFile);
+        $file = new File($name, $uploadedFile);
+
         try {
             // validate the file
             $this->validator->validate($uploadedFile);
-            $data = $this->filesystem
-                ->upload($name, $uploadedFile, $this->overwrite);
-
-            $file = new File($uploadedFile, $name, true, $data);
+            $this->filesystem
+                ->upload($file, $this->overwrite);
+            $file->setUploaded(true);
         } catch (Exception $exception) {
-            $file = new File($uploadedFile, $name, false, null, $exception);
+            $file->setUploaded(false);
+            $file->setException($exception);
         }
 
         return $this->processor->process($file);

@@ -17,7 +17,7 @@ use Slince\Upload\Processor\ChainProcessor;
 use Slince\Upload\Processor\ClosureProcessor;
 use Slince\Upload\Processor\ProcessorInterface;
 
-class UploadHandlerBuilder
+final class UploadHandlerBuilder
 {
     /**
      * @var boolean

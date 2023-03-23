@@ -22,27 +22,24 @@ final class File
      *
      * @var boolean
      */
-    protected bool $uploaded;
+    protected bool $uploaded = false;
 
     /**
-     * @var Throwable
+     * @var Throwable|null
      */
-    protected Throwable $exception;
+    protected ?Throwable $exception = null;
 
     /**
      * Storage system returned.
      *
-     * @var \Symfony\Component\HttpFoundation\File\File|mixed
+     * @var array
      */
-    protected mixed $details;
+    protected array $metadata;
 
-    public function __construct(UploadedFile $uploadedFile, string $name, bool $uploaded, mixed $details = null, Throwable $exception = null)
+    public function __construct(string $name, UploadedFile $uploadedFile)
     {
-        $this->uploadedFile = $uploadedFile;
         $this->name = $name;
-        $this->uploaded = $uploaded;
-        $this->details = $details;
-        $this->exception = $exception;
+        $this->uploadedFile = $uploadedFile;
     }
 
     /**
@@ -66,6 +63,16 @@ final class File
     }
 
     /**
+     * Set the upload result.
+     *
+     * @param bool $uploaded
+     */
+    public function setUploaded(bool $uploaded): void
+    {
+        $this->uploaded = $uploaded;
+    }
+
+    /**
      * Checks whether the file is uploaded successfully.
      *
      * @return bool
@@ -86,12 +93,10 @@ final class File
     }
 
     /**
-     * File details provided by storage layer.
-     *
-     * @return \Symfony\Component\HttpFoundation\File\File|mixed
+     * @param Throwable $exception
      */
-    public function getDetails(): mixed
+    public function setException(Throwable $exception): void
     {
-        return $this->details;
+        $this->exception = $exception;
     }
 }

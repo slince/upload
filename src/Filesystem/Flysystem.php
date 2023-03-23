@@ -6,7 +6,6 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use RuntimeException;
 use Slince\Upload\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Flysystem implements FilesystemInterface
 {
@@ -23,18 +22,18 @@ class Flysystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function upload(string $key, UploadedFile $file, bool $overwrite = false): void
+    public function upload(File $file, bool $overwrite = false): void
     {
         try {
-            $this->uploadToFlysystem($key, $file);
+            $this->uploadToFlysystem($file);
         } catch (RuntimeException $exception) {
             if (!$overwrite) {
-                throw new RuntimeException(sprintf('The file with key "%s" is exists.', $key));
+                throw new RuntimeException(sprintf('The file with key "%s" is exists.', $file->getName()));
             }
-            $this->filesystem->delete($key);
-            $this->uploadToFlysystem($key, $file);
+            $this->filesystem->delete($file->getName());
+            $this->uploadToFlysystem($file);
         }
-        @unlink($file->getPathname()); //remove old
+        @unlink($file->getUploadedFile()->getPathname()); //remove old
     }
 
     /**
@@ -48,16 +47,14 @@ class Flysystem implements FilesystemInterface
     }
 
     /**
-     * @param string $key
-     * @param UploadedFile $file
-     * @throws RuntimeException
+     * @param File $file
      */
-    protected function uploadToFlysystem(string $key, UploadedFile $file): void
+    protected function uploadToFlysystem(File $file): void
     {
         try {
-            $this->filesystem->writeStream($key, fopen($file->getPathname(), 'r'));
+            $this->filesystem->writeStream($file->getName(), fopen($file->getUploadedFile()->getPathname(), 'r'));
         } catch (FilesystemException $exception) {
-            throw new RuntimeException('Failed to upload to flysystem');
+            throw new RuntimeException('Failed to upload to flysystem:' . $exception->getMessage());
         }
     }
 }

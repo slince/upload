@@ -4,7 +4,6 @@ namespace Slince\Upload\Filesystem;
 
 use RuntimeException;
 use Slince\Upload\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Local implements FilesystemInterface
 {
@@ -21,7 +20,7 @@ class Local implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function upload(string $key, UploadedFile $file, bool $overwrite = false): void
+    public function upload(File $file, bool $overwrite = false): void
     {
         if (!$this->ensureDirectory($this->savePath)) {
             throw new \InvalidArgumentException(sprintf('Directory "%s" was not created', $this->savePath));
@@ -31,12 +30,12 @@ class Local implements FilesystemInterface
             throw new \InvalidArgumentException(sprintf('The directory "%s" is invalid', $this->savePath));
         }
 
-        $filePath = $this->getFilePath($key);
+        $filePath = $this->getFilePath($file->getName());
         if (!$overwrite && file_exists($filePath)) {
-            throw new RuntimeException(sprintf('The file with key "%s" is exists.', $key));
+            throw new RuntimeException(sprintf('The file with key "%s" is exists.', $file->getName()));
         }
 
-        $file->move(dirname($filePath), basename($filePath));
+        $file->getUploadedFile()->move(dirname($filePath), basename($filePath));
     }
 
     /**
