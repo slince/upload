@@ -15,9 +15,9 @@ $handler = $builder
     })
 
     //add constraints
-    ->sizeBetween('10m', '20m') //filter file size
-    ->allowExtensions(['jpg', 'txt']) //filter ext
-    ->allowMimeTypes(['image/*', 'text/plain']) //filter mime type
+    ->sizeBetween('1k', '20m') //filter file size
+    ->allowExtensions(['jpg', 'txt', 'pdf']) //filter ext
+    ->allowMimeTypes(['image/*', 'text/plain', '*/*']) //filter mime type
 
     // save to local
     ->saveTo(__DIR__ . '/dst')

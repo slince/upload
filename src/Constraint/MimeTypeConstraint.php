@@ -28,6 +28,7 @@ class MimeTypeConstraint implements ConstraintInterface
     {
         foreach ($this->allowedMimeTypes as $mimeType) {
             if ($mimeType === $file->getClientMimeType()
+                || (str_contains($mimeType, '*/*'))
                 || (str_contains($mimeType, '/*')
                     && explode('/', $mimeType)[0] === explode('/', $file->getMimeType())[0])
             ) {
