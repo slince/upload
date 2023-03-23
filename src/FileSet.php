@@ -5,7 +5,7 @@ namespace Slince\Upload;
 use Symfony\Component\HttpFoundation\FileBag;
 use Traversable;
 
-final class FileSet implements \IteratorAggregate, \Countable
+final class FileSet implements \IteratorAggregate, \ArrayAccess
 {
     /**
      * @var File[]
@@ -75,5 +75,37 @@ final class FileSet implements \IteratorAggregate, \Countable
     public function count(): int
     {
         return count($this->files);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetExists(mixed $offset): bool
+    {
+        return $this->has($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetGet(mixed $offset): ?File
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        throw new \InvalidArgumentException('unsupported');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function offsetUnset(mixed $offset): void
+    {
+        throw new \InvalidArgumentException('unsupported');
     }
 }
