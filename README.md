@@ -64,15 +64,15 @@ $files = $handler->handle();
 foreach ($files as $file) {
     $uploadedFile = $file->getUploadedFile();
     if ($file->isUploaded()) {
-        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getDetails()->getPathname();
+        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getMetadata('spl_file')->getPathname();
     } else {
         echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getException()->getMessage();
     }
     echo PHP_EOL;
 }
 ```
-File details `$file->getDetails()` is provided by storage layer. 
-if you are using `Local`, it is an instance of `SplFileInfo`. 
+File metadata `$file->getMetadata('metadata name')` is provided by storage layer. 
+if you are using `Local`, the file has a metadata named 'spl_file', it is an instance of `SplFileInfo`. 
 
 If you want access attributes of the file saved in the client, you can use like this.
 ```php
