@@ -5,7 +5,7 @@ namespace Slince\Upload;
 use Symfony\Component\HttpFoundation\FileBag;
 use Traversable;
 
-final class FileSet implements \IteratorAggregate, \ArrayAccess
+final class FileSet implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
      * @var File[]
