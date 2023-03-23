@@ -18,7 +18,7 @@ foreach ($files as $file) {
     //you can access some client attribute, like original name, extension, or mime type.
     $uploadedFile = $file->getUploadedFile();
     if ($file->isUploaded()) {
-        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getDetails()->getPathname();
+        echo $uploadedFile->getClientOriginalName() . ' upload ok, path:' . $file->getMetadata('spl_file')->getPathname();
     } else {
         echo $uploadedFile->getClientOriginalName() . ' upload error: ' . $file->getException()->getMessage();
     }

@@ -21,8 +21,8 @@ class UploadHandlerTest extends TestCase
 
         //test handle
         $files = $handler->handle();
-        $this->assertInstanceOf(File::class, $files[0]);
-        $this->assertStringContainsStringIgnoringCase('dst', $files[0]->getDetails()->getPathname());
+        $this->assertInstanceOf(File::class, $files->get(0));
+        $this->assertStringContainsStringIgnoringCase('dst', $files->get(0)->getMetadata('spl_file')->getPathname());
     }
 
     public function testClear()
@@ -31,8 +31,7 @@ class UploadHandlerTest extends TestCase
         $handler = $this->mockHandler(new FileBag([$file]));
 
         $files = $handler->handle();
-        $filePath = $files[0]->getDetails()->getPathname();
-
+        $filePath = $files->get(0)->getMetadata('spl_file')->getPathname();
         $handler->clear($files);
 
         if (method_exists($this, 'assertFileDoesNotExist')) {
@@ -63,12 +62,12 @@ class UploadHandlerTest extends TestCase
         $handler = $this->mockHandler(new FileBag([$file]));
         $result = $handler->handle();
 
-        $this->assertInstanceOf(\RuntimeException::class, $result[0]->getException());
+        $this->assertInstanceOf(\RuntimeException::class, $result->get(0)->getException());
 
         //start overwrite mode.
         $handler = $this->mockHandler(new FileBag([$file]), true);
         $result = $handler->handle();
-        $this->assertInstanceOf(File::class, $result[0]);
+        $this->assertInstanceOf(File::class, $result->get(0));
     }
 
 

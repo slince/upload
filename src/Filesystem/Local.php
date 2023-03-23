@@ -44,15 +44,10 @@ class Local implements FilesystemInterface
      */
     public function delete(File $file): bool
     {
-        $details = $file->getDetails();
+        $splFile = $file->getMetadata('spl_file');
 
-        $filePath = '';
-        if ($details) {
-            $filePath = $details->getPathname();
-        }
-
-        if (file_exists($filePath)) {
-            return unlink($filePath);
+        if (null !== $splFile && file_exists($splFile->getPathname())) {
+            return unlink($splFile->getPathname());
         }
 
         return true;

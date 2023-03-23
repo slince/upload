@@ -52,6 +52,16 @@ final class FileSet implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Returns the file with given field name
+     * @param string $name
+     * @return File|null
+     */
+    public function get(string $name): ?File
+    {
+        return $this->files[$name] ?? null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getIterator(): Traversable

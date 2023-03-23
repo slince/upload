@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
-final class UploadHandler
+class UploadHandler
 {
     /**
      * @var NamerInterface

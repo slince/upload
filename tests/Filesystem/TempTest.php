@@ -3,9 +3,9 @@
 namespace Slince\Upload\Tests\Filesystem;
 
 use PHPUnit\Framework\TestCase;
+use Slince\Upload\File;
 use Slince\Upload\Filesystem\Temp;
 use Slince\Upload\Tests\Utils;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class TempTest extends TestCase
 {
@@ -13,9 +13,10 @@ class TempTest extends TestCase
     {
         $dstFilePath = sys_get_temp_dir() . '/hello-3.txt';
         @unlink($dstFilePath);
-        $file = Utils::createFile('hello2.txt');
+        $uploadedFile = Utils::createFile('hello2.txt');
         $temp = new Temp();
-        $file = $temp->upload('hello-3.txt', $file);
-        $this->assertStringContainsStringIgnoringCase(sys_get_temp_dir(), $file->getPathname());
+        $file = new File('hello-3.txt', $uploadedFile);
+        $temp->upload($file);
+        $this->assertStringContainsStringIgnoringCase(sys_get_temp_dir(), $file->getMetadata('spl_file')->getPathname());
     }
 }
